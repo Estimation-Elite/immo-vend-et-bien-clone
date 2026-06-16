@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
 
     const content = {
       typeDeBien: body.typeDeBien || '',
+      adresse: body.adresse || '',
       ville: body.ville,
       codePostal: body.codePostal || '',
       delaiVente: body.delaiVente || '',

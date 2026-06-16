@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation';
 import CTAButton from '@/components/CTAButton';
 import { FormInput, FormSelect, FormPhoneInput, FormAddressInput } from '@/components/FormField';
 import { useAddressAutocomplete, type AddressSuggestion } from '@/hooks/useAddressAutocomplete';
+import { trackLeadSubmitted } from '@/lib/analytics/trackLeadSubmitted';
 
 const PROPERTY_TYPES = ['Une maison', 'Un appartement', 'Un Immeuble', 'Un terrain', 'Autre'] as const;
 const SALE_TIMELINES = ['Au plus vite', 'Dans les 3 mois', 'Plus tard', 'Je ne souhaite pas vendre'] as const;
 
 interface FormData {
   typeDeBien: string;
+  adresse: string;
   ville: string;
   codePostal: string;
   delaiVente: string;
@@ -40,6 +42,7 @@ export default function ContactForm() {
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
     typeDeBien: '',
+    adresse: '',
     ville: '',
     codePostal: '',
     delaiVente: '',
@@ -92,13 +95,14 @@ export default function ContactForm() {
 
   const onAddressInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleAddressChange(e);
-    setFormData((prev) => ({ ...prev, ville: '', codePostal: '' }));
+    setFormData((prev) => ({ ...prev, adresse: '', ville: '', codePostal: '' }));
   };
 
   const onSelectSuggestion = (suggestion: AddressSuggestion) => {
     handleSelectAddress(suggestion);
     setFormData((prev) => ({
       ...prev,
+      adresse: suggestion.label,
       ville: suggestion.city,
       codePostal: suggestion.postcode,
     }));
@@ -121,6 +125,7 @@ export default function ContactForm() {
         throw new Error(data.error || 'Une erreur est survenue.');
       }
 
+      trackLeadSubmitted();
       sessionStorage.setItem('contactData', JSON.stringify(formData));
       router.push('/confirmation');
       return;

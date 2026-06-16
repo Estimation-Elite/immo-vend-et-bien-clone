@@ -1,8 +1,0 @@
-# Credentials serveurs - NE PAS COMMITTER
-# Remplis les informations ci-dessous pour chaque serveur
-
-# Immo vend et bien (principal)
-MMB_HOST=212.227.39.239
-MMB_USER=root
-MMB_PASSWORD=v0GdaFr28Q79E5
-MMB_PORT=22

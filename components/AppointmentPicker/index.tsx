@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ArrowLeft, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { trackAppointmentScheduled } from '@/lib/analytics/trackAppointmentScheduled';
 
 const DAYS_FR = ['Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.', 'Dim.'];
 const MONTHS_FR = [
@@ -113,6 +114,7 @@ export default function AppointmentPicker({ onBack, contactData }: Props) {
       });
     } catch { /* on affiche quand même la confirmation */ }
 
+    trackAppointmentScheduled();
     setStep('done');
   };
 
