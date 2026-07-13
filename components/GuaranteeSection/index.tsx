@@ -42,7 +42,7 @@ export default function GuaranteeSection() {
       />
       {/* Decorative team member — Amina right */}
       <img
-        src="https://www.immovendetbien.com/wp-content/uploads/2024/05/Amina-12-768x1024.png"
+        src="/images/agents/amina-full.png"
         alt=""
         className="hidden lg:block absolute right-28 bottom-0 h-full max-h-140 z-1 object-contain object-[bottom_right]"
         aria-hidden="true"

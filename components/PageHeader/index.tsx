@@ -6,7 +6,7 @@ export default function PageHeader() {
       <div className="max-w-285 mx-auto">
         <Link href="/">
           <img
-            src="https://www.immovendetbien.com/wp-content/uploads/2024/07/logo-VendEtBien-horizontal-02-BLANC-ByLevel51-e1722354176898.png"
+            src="/images/logo-white-horizontal.png"
             alt="Vend & Bien"
             className="max-w-55 md:max-w-70 h-auto"
           />

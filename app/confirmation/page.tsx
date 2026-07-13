@@ -50,7 +50,7 @@ export default function ConfirmationPage() {
         <div className='relative max-w-235 w-full mx-auto flex items-center justify-center'>
           <Link href="/">
             <img
-              src="https://www.immovendetbien.com/wp-content/uploads/2024/07/logo-VendEtBien-horizontal-01-QUADRI-CMJN-ByLevel51222-1-e1753092930888.png"
+              src="/images/logo-horizontal.png"
               alt="Vend & Bien"
               className="max-w-55 md:max-w-70 h-auto"
             />
@@ -69,7 +69,7 @@ export default function ConfirmationPage() {
       {/* Contenu principal */}
       <main
         className="flex-1 relative bg-cover bg-center"
-        style={{ backgroundImage: "url('https://www.immovendetbien.com/wp-content/uploads/2024/05/Vend-bien.jpg')" }}
+        style={{ backgroundImage: "url('/images/hero/bg.jpg')" }}
       >
         {/* Overlay clair */}
         <div className="absolute inset-0 bg-white/75" />

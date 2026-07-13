@@ -33,7 +33,7 @@ export default function CTASection() {
   return (
     <section className="bg-white py-15 md:py-25 lg:py-50 relative overflow-x-clip text-center">
       <img
-        src="https://www.immovendetbien.com/wp-content/uploads/2025/07/dd-889x1024.png"
+        src="/images/agents/alessia-full2.png"
         alt=""
         className="hidden lg:block absolute left-0 bottom-0 h-3/4 max-h-145 z-1 object-contain object-[bottom_left]"
         aria-hidden="true"
@@ -50,7 +50,7 @@ export default function CTASection() {
         <div className="w-[300px] mx-auto mb-10" ref={lottieRef}></div>
       </div>
       <img
-        src="https://www.immovendetbien.com/wp-content/uploads/2025/07/Sebastien-2dd-889x1024.png"
+        src="/images/agents/sebastien-full2.png"
         alt=""
         className="hidden lg:block absolute right-0 bottom-0 h-3/4 max-h-145 z-1 object-contain object-[bottom_right]"
         aria-hidden="true"

@@ -20,7 +20,7 @@ export default function Navbar() {
       <div>
         <a href="#">
           <img
-            src="https://www.immovendetbien.com/wp-content/uploads/2024/07/logo-VendEtBien-horizontal-01-QUADRI-CMJN-ByLevel51222-1-e1753092930888.png"
+            src="/images/logo-horizontal.png"
             alt="Vend & Bien"
             className="max-w-50 md:max-w-62.5 lg:max-w-87.5 w-full h-auto"
           />

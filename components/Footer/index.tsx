@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="max-w-285 mx-auto flex flex-col items-center gap-5">
         <Link href="/">
           <img
-            src="https://www.immovendetbien.com/wp-content/uploads/2024/07/logo-VendEtBien-horizontal-02-BLANC-ByLevel51-e1722354176898.png"
+            src="/images/logo-white-horizontal.png"
             alt="Vend & Bien"
             className="max-w-65 h-auto"
           />

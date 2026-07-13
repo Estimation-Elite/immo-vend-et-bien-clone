@@ -22,7 +22,7 @@ export default function EligibilitySection() {
         <div className="flex flex-col md:flex-row gap-6 mb-12">
           <div
             className="flex-1 min-h-70 md:min-h-100 relative rounded-lg overflow-hidden bg-cover bg-center flex flex-col items-center justify-center p-10 cursor-pointer transition-transform duration-300 ease-in-out hover:scale-[1.02]"
-            style={{ backgroundImage: `url('https://www.immovendetbien.com/wp-content/uploads/2025/07/Maison-1024x788.jpg')` }}
+            style={{ backgroundImage: `url('/images/eligibility/maison.jpg')` }}
           >
             <div className="absolute inset-0 bg-black/50 z-0"></div>
             <div className="relative z-1 flex flex-col items-center gap-5">
@@ -32,7 +32,7 @@ export default function EligibilitySection() {
           </div>
           <div
             className="flex-1 min-h-70 md:min-h-100 relative rounded-lg overflow-hidden bg-cover bg-center flex flex-col items-center justify-center p-10 cursor-pointer transition-transform duration-300 ease-in-out hover:scale-[1.02]"
-            style={{ backgroundImage: `url('https://www.immovendetbien.com/wp-content/uploads/2024/05/francesca-tosolini-tHkJAMcO3QE-unsplash-1024x683.jpg')` }}
+            style={{ backgroundImage: `url('/images/eligibility/appartement.jpg')` }}
           >
             <div className="absolute inset-0 bg-black/50 z-0"></div>
             <div className="relative z-1 flex flex-col items-center gap-5">

@@ -27,7 +27,7 @@ export default function HeroSection() {
       pt-25 pb-2.5 px-5 md:pt-37.5 md:pb-30 md:px-5 lg:pt-50 lg:pb-50 lg:px-50 overflow-hidden text-center
       before:bg-white/82 before:absolute before:inset-0 before:z-[-1] before:content-['']
       "
-      style={{ backgroundImage: "url('https://www.immovendetbien.com/wp-content/uploads/2024/05/Vend-bien.jpg')" }}
+      style={{ backgroundImage: "url('/images/hero/bg.jpg')" }}
       id="header-form"
     >
       {/* min(100%, 1140px) */}
@@ -54,7 +54,7 @@ export default function HeroSection() {
         {!playing && (
           <>
             <img
-              src="https://www.immovendetbien.com/wp-content/uploads/2025/09/cover-pitch-new-VBdd.png"
+              src="/images/hero/video-cover.png"
               alt="Découvrir Vend & Bien"
               className="w-full block"
             />

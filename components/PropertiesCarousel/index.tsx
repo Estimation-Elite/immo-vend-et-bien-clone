@@ -7,23 +7,21 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import CTAButton from '@/components/CTAButton';
 
-const BASE = 'https://www.immovendetbien.com/wp-content/uploads/';
-
-const ALESSIA = BASE + '2024/05/Alassia-11-768x1024.jpeg';
-const SEBASTIEN = BASE + '2024/05/Sebastien-2-889x1024.png';
-const VERONIQUE = BASE + '2024/07/VeroWEB.jpg';
+const ALESSIA = '/images/agents/alessia.jpeg';
+const SEBASTIEN = '/images/agents/sebastien.png';
+const VERONIQUE = '/images/agents/veronique.jpg';
 
 const slides = [
-  { photo: BASE + '2024/06/Gael-2-1024x756.jpeg', city: 'Épernay', surface: 152, price: '315 000', agent: ALESSIA, agentName: 'Alessia', badge: 'Vendu en 15 jours' },
-  { photo: BASE + '2024/06/Sylvain-3-1024x768.jpg', city: 'Vauciennes', surface: 136, price: '305 000', agent: SEBASTIEN, agentName: 'Sébastien', badge: 'Vendu en 3 semaines' },
-  { photo: BASE + '2025/09/epernay490-1024x768.jpeg', city: 'Epernay', surface: 136, price: '490 000', agent: VERONIQUE, agentName: 'Véronique', badge: 'Vendu en 3 semaines' },
-  { photo: BASE + '2025/09/epernay129-1024x768.jpg', city: 'Épernay', surface: 80, price: '129 000', agent: ALESSIA, agentName: 'Alessia', badge: 'Vendu en 3 semaines' },
-  { photo: BASE + '2024/06/Francoise-1-1024x768.jpg', city: 'Épernay', surface: 213, price: '499 000', agent: SEBASTIEN, agentName: 'Sébastien', badge: 'Vendu en 15 jours' },
-  { photo: BASE + '2025/09/reims219-1024x768.jpeg', city: 'Reims', surface: 90, price: '219 000', agent: VERONIQUE, agentName: 'Véronique', badge: 'Vendu en 3 semaines' },
-  { photo: BASE + '2025/09/montbre610-1024x768.jpg', city: 'Montbré', surface: 160, price: '610 000', agent: ALESSIA, agentName: 'Alessia', badge: 'Vendu en 3 semaines' },
-  { photo: BASE + '2025/09/reims349-1024x768.jpeg', city: 'Reims', surface: 120, price: '349 000', agent: VERONIQUE, agentName: 'Véronique', badge: 'Vendu en 3 semaines' },
-  { photo: BASE + '2025/09/reims353-1024x683.jpg', city: 'Reims', surface: 93, price: '353 000', agent: ALESSIA, agentName: 'Alessia', badge: 'Vendu en 3 semaines' },
-  { photo: BASE + '2025/09/bezannes319-1024x768.jpeg', city: 'Bezannes', surface: 104, price: '319 000', agent: VERONIQUE, agentName: 'Véronique', badge: 'Vendu en 3 semaines' },
+  { photo: '/images/properties/epernay-315.jpeg', city: 'Épernay', surface: 152, price: '315 000', agent: ALESSIA, agentName: 'Alessia', badge: 'Vendu en 15 jours' },
+  { photo: '/images/properties/vauciennes-305.jpg', city: 'Vauciennes', surface: 136, price: '305 000', agent: SEBASTIEN, agentName: 'Sébastien', badge: 'Vendu en 3 semaines' },
+  { photo: '/images/properties/epernay-490.jpeg', city: 'Epernay', surface: 136, price: '490 000', agent: VERONIQUE, agentName: 'Véronique', badge: 'Vendu en 3 semaines' },
+  { photo: '/images/properties/epernay-129.jpg', city: 'Épernay', surface: 80, price: '129 000', agent: ALESSIA, agentName: 'Alessia', badge: 'Vendu en 3 semaines' },
+  { photo: '/images/properties/reims-francoise.jpg', city: 'Épernay', surface: 213, price: '499 000', agent: SEBASTIEN, agentName: 'Sébastien', badge: 'Vendu en 15 jours' },
+  { photo: '/images/properties/reims-219.jpeg', city: 'Reims', surface: 90, price: '219 000', agent: VERONIQUE, agentName: 'Véronique', badge: 'Vendu en 3 semaines' },
+  { photo: '/images/properties/montbre-610.jpg', city: 'Montbré', surface: 160, price: '610 000', agent: ALESSIA, agentName: 'Alessia', badge: 'Vendu en 3 semaines' },
+  { photo: '/images/properties/reims-349.jpeg', city: 'Reims', surface: 120, price: '349 000', agent: VERONIQUE, agentName: 'Véronique', badge: 'Vendu en 3 semaines' },
+  { photo: '/images/properties/reims-353.jpg', city: 'Reims', surface: 93, price: '353 000', agent: ALESSIA, agentName: 'Alessia', badge: 'Vendu en 3 semaines' },
+  { photo: '/images/properties/bezannes-319.jpeg', city: 'Bezannes', surface: 104, price: '319 000', agent: VERONIQUE, agentName: 'Véronique', badge: 'Vendu en 3 semaines' },
 ];
 
 export default function PropertiesCarousel() {

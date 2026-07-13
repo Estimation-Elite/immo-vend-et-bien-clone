@@ -58,7 +58,7 @@ export default function TeamSection() {
           {/* Center column: Logo + Text + CTA */}
           <div className="flex flex-col items-center justify-center text-center gap-5 max-w-132.5 flex-1 py-50 px-8">
             <img
-              src="https://www.immovendetbien.com/wp-content/uploads/2024/07/logo-VendEtBien-horizontal-01-QUADRI-CMJN-ByLevel51222-1-e1753092930888.png"
+              src="/images/logo-horizontal.png"
               alt="Vend & Bien"
               className="w-full max-w-115 h-auto"
             />
@@ -83,7 +83,7 @@ export default function TeamSection() {
           {/* Center content first on mobile */}
           <div className="flex flex-col items-center text-center gap-5 max-w-100">
             <img
-              src="https://www.immovendetbien.com/wp-content/uploads/2024/07/logo-VendEtBien-horizontal-01-QUADRI-CMJN-ByLevel51222-1-e1753092930888.png"
+              src="/images/logo-horizontal.png"
               alt="Vend & Bien"
               className="w-full max-w-75 h-auto"
             />

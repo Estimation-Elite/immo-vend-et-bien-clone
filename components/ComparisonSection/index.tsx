@@ -44,7 +44,7 @@ export default function ComparisonSection() {
           <div className="flex-1 p-[28px_20px] md:p-10 rounded-lg bg-(--color-orange)">
             <div className="flex items-center gap-4 mb-8">
               <img
-                src="https://www.immovendetbien.com/wp-content/uploads/2024/07/logo-VendEtBien-horizontal-02-BLANC-ByLevel51-e1722354176898.png"
+                src="/images/logo-white-horizontal.png"
                 alt="Vend & Bien"
                 className="max-w-50 h-auto"
               />

@@ -139,7 +139,7 @@ export default function HowItWorksSection() {
       ref={sectionRef}
       className="relative min-h-150 overflow-visible"
       style={{
-        backgroundImage: 'url(https://www.immovendetbien.com/wp-content/uploads/2024/05/trouver_un_conceiller_1.jpg)',
+        backgroundImage: 'url(/images/how-it-works/bg.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: '0% 0%',
       }}

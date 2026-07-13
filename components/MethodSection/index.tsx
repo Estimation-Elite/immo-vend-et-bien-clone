@@ -29,7 +29,7 @@ export default function MethodSection() {
             </div>
             <div
               className="flex-1 min-h-62.5 lg:min-h-125 bg-cover bg-center border-[5px] border-solid border-(--color-orange) rounded-[5px] z-8"
-              style={{ backgroundImage: `url('https://www.immovendetbien.com/wp-content/uploads/2025/06/Estimation_web.jpg')` }}
+              style={{ backgroundImage: `url('/images/steps/estimation.jpg')` }}
             ></div>
           </div>
 
@@ -37,7 +37,7 @@ export default function MethodSection() {
           <div className="flex flex-col-reverse lg:flex-row items-stretch">
             <div
               className="flex-1 min-h-62.5 lg:min-h-125 bg-cover bg-center border-[5px] border-solid border-(--color-orange) z-8"
-              style={{ backgroundImage: `url('https://www.immovendetbien.com/wp-content/uploads/2024/05/Digital.png')` }}
+              style={{ backgroundImage: `url('/images/steps/digital.png')` }}
             ></div>
             <div className="flex-1 bg-white shadow-[0_0_20px_-4px_rgba(0,0,0,0.15)] p-6 md:p-12.5 relative z-10 flex flex-col justify-center lg:-ml-20 lg:mr-20 self-center">
               <span className="bg-(--color-orange) text-white font-[effra,Roboto,sans-serif] text-[14px] font-semibold uppercase tracking-[1px] px-2.5 py-1.25 inline-block mb-5 self-start">
@@ -74,7 +74,7 @@ export default function MethodSection() {
             </div>
             <div
               className="flex-1 min-h-62.5 lg:min-h-125 bg-cover bg-center border-[5px] border-solid border-(--color-orange) z-8"
-              style={{ backgroundImage: `url('https://www.immovendetbien.com/wp-content/uploads/2025/08/photo_equipe.png')` }}
+              style={{ backgroundImage: `url('/images/steps/equipe.png')` }}
             ></div>
           </div>
         </div>
