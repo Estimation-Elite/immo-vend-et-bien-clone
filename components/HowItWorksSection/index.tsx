@@ -11,41 +11,29 @@ interface Step {
 
 const steps: Step[] = [
   {
-    lottie: 'https://lottie.host/0a8acba0-14e6-42e4-a5e9-4b66ebe72f1d/yqyIaB5R7J.json',
-    title: 'Éligibilité',
-    text: 'Vérifiez en 1 clic si votre bien est éligible',
+    lottie: 'https://lottie.host/b0cd9abb-0ad5-4a85-93da-a4f6edc7f92f/LDQNV5wFuK.json',
+    title: 'Votre projet',
+    text: 'Parlez de votre projet avec un conseiller & découvrez notre garantie vendeur à 30 jours.',
   },
   {
     lottie: 'https://lottie.host/398fb822-80c6-456e-b0aa-16db0e40e5c7/sR0EyLKKhx.json',
-    title: 'Estimation offerte',
-    text: "Grâce à notre estimation innovante, vous bénéficiez d\u2019une évaluation fiable pour optimiser la vente de votre bien.",
+    title: 'Prix de vente optimal',
+    text: 'Bénéficiez de notre Triple Estimation & maximisez la valeur de votre bien.',
   },
   {
     lottie: 'https://lottie.host/624aef38-a7c3-4371-892a-1c3be7c7fed6/bb6DWwEOlS.json',
-    title: 'Déploiement de notre méthode',
-    text: 'Notre solution innovante déployée par notre expert dédié à votre projet immobilier.',
-  },
-  {
-    lottie: 'https://lottie.host/3f342f4f-2aba-421f-aeb9-dcc28f242b3d/pjLOURu7Zh.json',
-    title: 'Négociation et vente du bien',
-    text: "Qualifier les visites, mener les négociations, sécuriser le financement, c\u2019est notre métier.",
-  },
-  {
-    lottie: 'https://lottie.host/b0cd9abb-0ad5-4a85-93da-a4f6edc7f92f/LDQNV5wFuK.json',
-    title: 'Suivi & accompagnement administratif',
-    text: 'Du premier contact au passage chez le notaire, nous sommes à vos côtés pour tout gérer !',
+    title: 'Réseaux d\u2019acquéreurs',
+    text: 'Validez notre plan d\u2019action de vente & activez notre réseau d\u2019acquéreurs exclusifs.',
   },
   {
     lottie: 'https://lottie.host/f8b5b868-ef2c-4cb7-a722-d49a265d85b5/ViLARkuAgj.json',
     title: 'Souriez, c\'est vendu !',
-    text: 'Et ouvrez la porte de vos nouveaux projets immobiliers\u2026',
+    text: 'Ouvrez la porte de votre nouveau projet immobilier\u2026',
   },
 ];
 
 /* Arrow config: side alternates left/right, each has a specific rotation */
 const arrowConfigs = [
-  { side: 'left', transform: 'rotate(-30deg)' },
-  { side: 'right', transform: 'rotate(30deg) scaleX(-1)' },
   { side: 'left', transform: 'rotate(-30deg)' },
   { side: 'right', transform: 'rotate(30deg) scaleX(-1)' },
   { side: 'left', transform: 'rotate(-30deg)' },
@@ -119,11 +107,11 @@ function StepCard({ step }: { step: Step }) {
       className="bg-white p-6 shadow-[0_0_20px_-4px_rgba(0,0,0,0.15)] w-full flex gap-5 flex-row items-center"
     >
       <LottieAnimation url={step.lottie} />
-      <div className="flex flex-col gap-3">
-        <h3 className="font-[arista-pro,Roboto,sans-serif] text-[19px] text-(--color-dark) font-bold m-0">
+      <div className="flex flex-col gap-2">
+        <h3 className="font-[arista-pro,Roboto,sans-serif] text-[21px] text-(--color-dark) font-bold m-0">
           {step.title}
         </h3>
-        <p className="font-[effra,Roboto,sans-serif] text-[16px] text-[#58595b] m-0 leading-normal">
+        <p className="font-[effra,Roboto,sans-serif] text-[18px] text-[#58595b] m-0 leading-normal">
           {step.text}
         </p>
       </div>
@@ -152,16 +140,13 @@ export default function HowItWorksSection() {
         }}
       />
 
-      <div className="relative z-1 max-w-285 mx-auto px-5 py-25 flex items-center justify-center lg:justify-start">
+      <div className="relative z-1 max-w-285 mx-auto px-5 py-15 flex items-center justify-center lg:justify-start">
         {/* Single column — 500px wide, gap 10px, all content stacked */}
         <div className="w-full lg:w-125.25 flex flex-col gap-2.5 justify-center">
           {/* Heading — outside cards */}
-          <h2 className="font-[arista-pro,Roboto,sans-serif] text-[26px] md:text-[36px] text-(--color-dark) m-0">
+          <h2 className="font-[arista-pro,Roboto,sans-serif] text-[26px] md:text-[36px] text-(--color-dark) m-0 mb-2">
             Comment ça marche ?
           </h2>
-          <p className="font-[effra,Roboto,sans-serif] text-[18px] text-[#58595b] m-0 mb-2">
-            Tout est pensé pour Vendre &amp; Bien !
-          </p>
 
           {/* Steps + Arrows — all siblings */}
           {steps.map((step, i) => (

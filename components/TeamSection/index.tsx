@@ -2,15 +2,20 @@
 
 import CTAButton from '@/components/CTAButton';
 
+// Colonne gauche (desktop) : Manil en haut, Alessia en bas
 const leftMembers = [
-  { name: 'Alessia', src: '/images/VeroWEB22.png' },
-  { name: 'Amina', src: '/images/Amina-881x1024.jpeg' },
+  { name: 'Manil', src: '/images/agents/manil.jpg' },
+  { name: 'Alessia', src: '/images/agents/alessia2.jpg' },
 ];
 
+// Colonne droite (desktop) : Véronique en haut, Malik en bas
 const rightMembers = [
-  { name: 'Véronique', src: '/images/VeroWEB.jpg' },
-  { name: 'Sébastien', src: '/images/VeroWEB33.png' },
+  { name: 'Véronique', src: '/images/agents/veronique.jpg' },
+  { name: 'Malik', src: '/images/agents/malik.jpg' },
 ];
+
+// Ordre visuel mobile (grille 2 colonnes) : Manil, Véronique / Alessia, Malik
+const mobileOrder = [leftMembers[0], rightMembers[0], leftMembers[1], rightMembers[1]];
 
 function MemberCard({ name, src }: { name: string; src: string }) {
   return (
@@ -34,7 +39,7 @@ function MemberCard({ name, src }: { name: string; src: string }) {
 
 export default function TeamSection() {
   return (
-    <section className="py-16 md:py-24 relative overflow-visible -mt-20 mb-24">
+    <section className="pt-16 pb-12 md:pt-20 md:pb-16 relative overflow-visible mb-16">
       {/* V watermark overlay — visible behind content */}
       <div
         className="absolute inset-0 z-0 opacity-10 pointer-events-none"
@@ -48,7 +53,7 @@ export default function TeamSection() {
       <div className="max-w-360 mx-auto px-5 relative z-1">
         {/* Desktop layout: 3 columns */}
         <div className="hidden lg:flex items-center justify-center gap-0">
-          {/* Left column: Alessia + Amina */}
+          {/* Left column: Manil (haut) + Alessia (bas) */}
           <div className="flex flex-col gap-37.5 w-65 shrink-0">
             {leftMembers.map((member) => (
               <MemberCard key={member.name} {...member} />
@@ -56,21 +61,20 @@ export default function TeamSection() {
           </div>
 
           {/* Center column: Logo + Text + CTA */}
-          <div className="flex flex-col items-center justify-center text-center gap-5 max-w-132.5 flex-1 py-50 px-8">
+          <div className="flex flex-col items-center justify-center text-center gap-4 max-w-132.5 flex-1 py-40 px-8">
             <img
               src="/images/logo-horizontal.png"
               alt="Vend & Bien"
               className="w-full max-w-115 h-auto"
             />
-            <p className="font-[effra,Roboto,sans-serif] text-[25px] text-[#58595b] leading-[1.2] m-0">
-              Bien plus qu&apos;une agence, nous combinons{' '}
-              <strong className="text-(--color-orange)">expertise immobilière et innovation digitale</strong>,{' '}
-              pour vous accompagner avec succès.
+            <p className="font-[effra,Roboto,sans-serif] text-[28px] text-[#58595b] leading-[1.2] m-0">
+              Votre projet immobilier,{' '}
+              <strong className="text-(--color-orange)">notre priorité absolue&nbsp;!</strong>
             </p>
             <CTAButton>Je vérifie l&apos;éligibilité de mon bien</CTAButton>
           </div>
 
-          {/* Right column: Véronique + Sébastien */}
+          {/* Right column: Véronique (haut) + Malik (bas) */}
           <div className="flex flex-col gap-37.5 w-68.75 shrink-0">
             {rightMembers.map((member) => (
               <MemberCard key={member.name} {...member} />
@@ -79,25 +83,24 @@ export default function TeamSection() {
         </div>
 
         {/* Mobile layout: stacked */}
-        <div className="flex flex-col items-center gap-8 lg:hidden">
+        <div className="flex flex-col items-center gap-6 lg:hidden">
           {/* Center content first on mobile */}
-          <div className="flex flex-col items-center text-center gap-5 max-w-100">
+          <div className="flex flex-col items-center text-center gap-4 max-w-100">
             <img
               src="/images/logo-horizontal.png"
               alt="Vend & Bien"
               className="w-full max-w-75 h-auto"
             />
-            <p className="font-[effra,Roboto,sans-serif] text-[20px] text-[#58595b] leading-[1.2] m-0">
-              Bien plus qu&apos;une agence, nous combinons{' '}
-              <strong className="text-(--color-orange)">expertise immobilière et innovation digitale</strong>,{' '}
-              pour vous accompagner avec succès.
+            <p className="font-[effra,Roboto,sans-serif] text-[22px] text-[#58595b] leading-[1.2] m-0">
+              Votre projet immobilier,{' '}
+              <strong className="text-(--color-orange)">notre priorité absolue&nbsp;!</strong>
             </p>
             <CTAButton>Je vérifie l&apos;éligibilité de mon bien</CTAButton>
           </div>
 
-          {/* Team members grid on mobile */}
-          <div className="grid grid-cols-2 gap-4 w-full max-w-100">
-            {[...leftMembers, ...rightMembers].map((member) => (
+          {/* Team members grid on mobile — ordre : Manil, Véronique / Alessia, Malik */}
+          <div className="grid grid-cols-2 gap-4 gap-y-8 w-full max-w-100">
+            {mobileOrder.map((member) => (
               <MemberCard key={member.name} {...member} />
             ))}
           </div>

@@ -10,7 +10,7 @@ interface StatItem {
 
 const stats: StatItem[] = [
   { label: 'Biens vendus', target: 188, suffix: '' },
-  { label: 'Délai de vente mandat performance', target: 30, suffix: ' Jours' },
+  { label: 'Garantie Vendeur', target: 30, suffix: ' jours' },
   { label: 'Satisfaction clients', target: 98, suffix: ' %' },
 ];
 
@@ -40,11 +40,11 @@ function useCounter(target: number, started: boolean) {
 function StatCounter({ stat, started }: { stat: StatItem; started: boolean }) {
   const value = useCounter(stat.target, started);
   return (
-    <div className="text-center flex-1 min-w-30 md:min-w-40">
-      <span className="font-[arista-pro,Roboto,sans-serif] text-[32px] text-(--color-dark) block leading-none uppercase">
+    <div className="text-center px-1 sm:px-3">
+      <span className="font-[arista-pro,Roboto,sans-serif] text-[26px] sm:text-[34px] md:text-[44px] text-(--color-dark) block leading-none uppercase whitespace-nowrap">
         {value}{stat.suffix}
       </span>
-      <span className="font-[effra,Roboto,sans-serif] text-[28px] font-bold text-(--color-orange) mt-1.5 block">
+      <span className="font-[effra,Roboto,sans-serif] text-[14px] sm:text-[19px] md:text-[26px] font-bold text-(--color-orange) mt-1.5 block leading-tight">
         {stat.label}
       </span>
     </div>
@@ -71,17 +71,9 @@ export default function StatsBar() {
 
   return (
     <section className="relative z-10 -mt-10 md:-mt-20 px-5 bg-transparent" ref={ref}>
-      <div className="max-w-285 mx-auto bg-white shadow-[0px_0px_20px_-4px_rgba(0,0,0,0.155)] px-4 py-6 md:px-5 md:py-9 flex justify-around items-center gap-4 md:gap-5 flex-wrap">
-        {stats.map((stat, i) => (
-          <>
-            <StatCounter key={stat.label} stat={stat} started={started} />
-            {i < stats.length - 1 &&
-              <div
-                key={`divider-${i}`}
-                className="hidden md:block w-0.5 h-15 bg-black/10"
-              ></div>
-            }
-          </>
+      <div className="max-w-285 mx-auto bg-white shadow-[0px_0px_20px_-4px_rgba(0,0,0,0.155)] px-2 py-6 sm:px-4 md:px-5 md:py-9 grid grid-cols-3 items-center divide-x divide-black/10">
+        {stats.map((stat) => (
+          <StatCounter key={stat.label} stat={stat} started={started} />
         ))}
       </div>
     </section>

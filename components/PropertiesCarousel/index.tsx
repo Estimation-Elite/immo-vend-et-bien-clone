@@ -26,15 +26,12 @@ const slides = [
 
 export default function PropertiesCarousel() {
   return (
-    <section className="bg-(--color-teal) py-15 md:py-25">
+    <section className="bg-(--color-teal) py-12 md:py-18">
       <div className="max-w-285 mx-auto px-5 text-center">
-        <h2 className="font-['arista-pro','Roboto',sans-serif] text-[24px] md:text-[36px] text-white m-0 mb-3">
+        <h2 className="font-['arista-pro','Roboto',sans-serif] text-[28px] md:text-[40px] text-white m-0 mb-8">
           Nos derniers biens vendus en moins de 30 jours
         </h2>
-        <p className="font-['effra','Roboto',sans-serif] text-[20px] text-white mb-12">
-          Ajoutez-y votre bien sans plus tarder !
-        </p>
-        <div className="mb-10 properties-carousel">
+        <div className="mb-8 properties-carousel">
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
             navigation

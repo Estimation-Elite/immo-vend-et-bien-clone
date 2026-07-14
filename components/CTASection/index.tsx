@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import CTAButton from '@/components/CTAButton';
 
 export default function CTASection() {
   const lottieRef = useRef<HTMLDivElement>(null);
@@ -31,30 +32,31 @@ export default function CTASection() {
   }, []);
 
   return (
-    <section className="bg-white py-15 md:py-25 lg:py-50 relative overflow-x-clip text-center">
-      <img
-        src="/images/agents/alessia-full2.png"
-        alt=""
-        className="hidden lg:block absolute left-0 bottom-0 h-3/4 max-h-145 z-1 object-contain object-[bottom_left]"
-        aria-hidden="true"
-      />
+    <section className="bg-white py-12 md:py-20 lg:py-32 relative overflow-x-clip text-center">
       <div className="max-w-285 mx-auto px-5 relative z-2">
-        <h2 className="w-full md:w-[90%] mx-auto mb-4 font-[effra,Roboto,sans-serif] text-[20px] md:text-[25px] text-(--color-dark) leading-normal">
+        <h2 className="w-full md:w-[90%] mx-auto mb-3 font-[effra,Roboto,sans-serif] text-[22px] md:text-[28px] text-(--color-dark) leading-normal">
           Nous vendons votre bien dans{' '}
           <span className="text-[#DE6539]">les 30 prochains jours</span>, au{' '}
           <span className="text-[#DE6539]">prix convenu.</span>
         </h2>
-        <p className="font-[effra,Roboto,sans-serif] text-[20px] text-[var(--color-gray)] mb-10">
+        <p className="font-[effra,Roboto,sans-serif] text-[22px] text-[var(--color-gray)] mb-6">
           Sinon, jusqu&apos;à <strong>100% des honoraires offerts</strong>.
         </p>
-        <div className="w-[300px] mx-auto mb-10" ref={lottieRef}></div>
+        <div className="w-[300px] mx-auto mb-6" ref={lottieRef}></div>
+        <div className="flex flex-col items-center gap-3">
+          <CTAButton
+            as="button"
+            variant="orange-warm"
+            onClick={() => window.dispatchEvent(new CustomEvent('open-contact-form'))}
+          >
+            EN SAVOIR PLUS
+          </CTAButton>
+          <span className="inline-flex items-center gap-2 bg-[#DE6539]/10 text-[#DE6539] font-[effra,Roboto,sans-serif] font-semibold text-[15px] px-4 py-1.5 rounded-full uppercase tracking-wide">
+            <span className="w-2 h-2 rounded-full bg-[#DE6539] animate-pulse" aria-hidden="true"></span>
+            Offre limitée&nbsp;: 8 places disponibles
+          </span>
+        </div>
       </div>
-      <img
-        src="/images/agents/sebastien-full2.png"
-        alt=""
-        className="hidden lg:block absolute right-0 bottom-0 h-3/4 max-h-145 z-1 object-contain object-[bottom_right]"
-        aria-hidden="true"
-      />
     </section>
   );
 }

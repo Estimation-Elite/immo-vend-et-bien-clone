@@ -1,3 +1,5 @@
+'use client';
+
 const base = 'font-[effra,Roboto,sans-serif] font-semibold cursor-pointer no-underline inline-block transition-colors duration-200';
 
 const variants = {
@@ -53,12 +55,21 @@ export default function CTAButton({
     );
   }
 
+  // L'ancre #header-form n'héberge plus de formulaire : les CTA par défaut
+  // ouvrent la modale de contact globale (écoutée par StickyMobileCTA).
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (onClick) {
+      (onClick as (e: React.MouseEvent<HTMLAnchorElement>) => void)(e);
+      return;
+    }
+    if (href === '#header-form') {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('open-contact-form'));
+    }
+  };
+
   return (
-    <a
-      href={href}
-      onClick={onClick as (e: React.MouseEvent<HTMLAnchorElement>) => void}
-      className={classes}
-    >
+    <a href={href} onClick={handleAnchorClick} className={classes}>
       {children}
     </a>
   );

@@ -16,13 +16,13 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="absolute top-0 left-0 w-full z-999 px-2.5 py-2.5 flex items-center justify-center md:px-2.5 md:py-2.5 lg:px-10 lg:py-2.5 md:justify-between">
+    <nav className="absolute top-0 left-0 w-full z-999 px-2.5 py-1.5 flex items-center justify-center md:px-2.5 md:py-2 lg:px-10 lg:py-2 md:justify-between">
       <div>
         <a href="#">
           <img
             src="/images/logo-horizontal.png"
             alt="Vend & Bien"
-            className="max-w-50 md:max-w-62.5 lg:max-w-87.5 w-full h-auto"
+            className="max-w-65 md:max-w-85 lg:max-w-110 w-full h-auto"
           />
         </a>
       </div>
