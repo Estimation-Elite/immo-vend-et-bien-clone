@@ -58,6 +58,7 @@ export default function ContactForm() {
   });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -127,7 +128,8 @@ export default function ContactForm() {
 
       trackLeadSubmitted();
       sessionStorage.setItem('contactData', JSON.stringify(formData));
-      router.push('/confirmation');
+      setStatus('idle');
+      setSubmitted(true);
       return;
     } catch (err) {
       setStatus('error');
@@ -140,6 +142,42 @@ export default function ContactForm() {
   const showNom = showDelai && formData.delaiVente !== '';
   const showEmail = showNom && formData.nom.trim().length > 0;
   const showTelephone = showEmail && formData.email.trim().length > 0;
+
+  // Étape suivante (dans la modale) : la vidéo, débloquée après l'envoi du formulaire
+  if (submitted) {
+    return (
+      <div className="w-full max-w-225 border-3 border-(--color-orange) rounded-xl bg-white p-8 md:p-10 text-center mt-2">
+        <h2 className="font-[arista-pro,Roboto,sans-serif] text-[24px] md:text-[28px] text-(--color-dark) leading-tight mb-1">
+          Merci&nbsp;! Voici votre <span className="text-(--color-orange)">vidéo de présentation</span>
+        </h2>
+        <p className="font-[effra,Roboto,sans-serif] text-[15px] text-(--color-gray) mb-5">
+          Découvrez comment nous vendons votre bien en 30 jours, au prix convenu.
+        </p>
+        <div className="rounded-xl overflow-hidden shadow-[0_6px_24px_rgba(0,0,0,0.15)]">
+          <video
+            src="/videos/presentation.mp4"
+            poster="/images/hero/video-cover.png"
+            controls
+            autoPlay
+            playsInline
+            className="w-full block bg-black"
+          />
+        </div>
+        <CTAButton
+          as="button"
+          type="button"
+          variant="orange-warm"
+          size="pill"
+          onClick={() => router.push('/confirmation')}
+          className="w-full border-none mt-6"
+        >
+          <span className="font-bold text-[18px] md:text-[20px] block">
+            Prendre rendez-vous avec un conseiller
+          </span>
+        </CTAButton>
+      </div>
+    );
+  }
 
   return (
     <form

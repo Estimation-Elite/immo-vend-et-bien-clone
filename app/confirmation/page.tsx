@@ -128,22 +128,6 @@ export default function ConfirmationPage() {
             <p className="font-[effra,Roboto,sans-serif] text-[16px] md:text-[18px] text-(--color-dark) leading-relaxed max-w-lg">
               R&eacute;servez d&egrave;s maintenant <strong>votre appel d&eacute;couverte</strong> avec l&apos;un de nos conseillers.
             </p>
-
-            {/* Vidéo de présentation — débloquée maintenant que les informations sont saisies */}
-            <div className="mt-8 w-full max-w-lg">
-              <p className="font-[effra,Roboto,sans-serif] text-[14px] font-bold uppercase tracking-[0.5px] text-(--color-orange) mb-2">
-                Votre vid&eacute;o de pr&eacute;sentation est d&eacute;bloqu&eacute;e
-              </p>
-              <div className="rounded-xl overflow-hidden shadow-2xl">
-                <video
-                  src="/videos/presentation.mp4"
-                  poster="/images/hero/video-cover.png"
-                  controls
-                  playsInline
-                  className="w-full block bg-black"
-                />
-              </div>
-            </div>
           </div>
 
           {/* Colonne droite */}
