@@ -39,9 +39,9 @@ export default function HeroSection() {
           Nous vendons votre bien<br className="hidden md:inline" />
           {' '}<span className="text-(--color-orange)">en 30 jours</span> et <span className="text-(--color-orange)">au prix convenu</span>
         </h1>
-        <p className="font-[effra,Roboto,sans-serif] text-[18px] md:text-[20px] text-(--color-dark) m-0 leading-[1.3]">
-          Sinon jusqu&apos;à{' '}
-          <strong className="text-[24px] md:text-[26px] lg:text-[28px]">100% des honoraires offerts</strong>
+        <p className="font-[effra,Roboto,sans-serif] text-[20px] md:text-[22px] text-(--color-dark) m-0 leading-[1.3]">
+          ou jusqu&apos;à{' '}
+          <strong className="text-[26px] md:text-[28px] lg:text-[30px]">100% des honoraires offerts</strong>
         </p>
         <div className="mt-1 inline-flex items-center gap-2 rounded-full border-2 border-(--color-orange) bg-white/90 px-4 py-1.5">
           <span className="w-2 h-2 rounded-full bg-(--color-orange) animate-pulse" aria-hidden="true" />

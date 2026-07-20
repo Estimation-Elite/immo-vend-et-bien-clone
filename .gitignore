@@ -41,3 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 .servers
+# Scratch / maquettes Tunnel 1 (non versionnés)
+.playwright-mcp/
+public/tunnel-mockups.html
+tunnel-option-*.png

@@ -10,6 +10,7 @@ import CTASection from '@/components/CTASection';
 import EligibilitySection from '@/components/EligibilitySection';
 import FAQSection from '@/components/FAQSection';
 import StickyMobileCTA from '@/components/StickyMobileCTA';
+import LiveAccelerator from '@/components/LiveAccelerator';
 import Footer from '@/components/Footer';
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
       <StatsBar />
       <TeamSection />
       <ComparisonSection />
+      <LiveAccelerator className="py-8 px-5" />
       <TestimonialsSection />
       <HowItWorksSection />
       {/* Bloc blanc CTA + avis : les bustes détourés sont ancrés en bas du bloc complet */}
@@ -41,6 +43,7 @@ export default function Home() {
           aria-hidden="true"
         />
       </div>
+      <LiveAccelerator className="pt-12 px-5" />
       <PropertiesCarousel />
       <FAQSection />
       <StickyMobileCTA />
