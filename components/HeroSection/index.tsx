@@ -49,37 +49,8 @@ export default function HeroSection() {
         <div ref={trustindexMobileRef} className="mt-2 md:hidden" />
       </div>
 
-      {/* Vidéo verrouillée : accessible uniquement après saisie des coordonnées */}
-      <button
-        type="button"
-        onClick={openContactForm}
-        aria-label="Remplir le formulaire pour accéder à la vidéo"
-        className="group mt-4 mx-auto relative block w-full max-w-[min(100%, 1140px)] cursor-pointer overflow-hidden shadow-[0_6px_24px_rgba(0,0,0,0.15)]"
-      >
-        <img
-          src="/images/hero/video-cover.png"
-          alt=""
-          aria-hidden="true"
-          className="w-full block scale-105 blur-[6px]"
-        />
-        <span className="absolute inset-0 bg-black/55 flex flex-col items-center justify-center gap-3 px-6 text-center">
-          <span className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-(--color-orange) flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.35)] transition-transform duration-200 group-hover:scale-105">
-            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <rect x="4" y="11" width="16" height="10" rx="2" />
-              <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-            </svg>
-          </span>
-          <span className="font-[arista-pro,Roboto,sans-serif] text-white text-[20px] md:text-[26px] leading-tight max-w-md">
-            Consultez notre vidéo en rentrant vos coordonnées
-          </span>
-          <span className="font-[effra,Roboto,sans-serif] text-white/80 text-[13px] md:text-[15px] uppercase tracking-[1px]">
-            Cliquez pour débloquer &#9654;
-          </span>
-        </span>
-      </button>
-
-      {/* CTA sous la vidéo */}
-      <div className="relative z-1 mt-4 flex justify-center">
+      {/* CTA principal du hero */}
+      <div className="relative z-1 mt-6 flex justify-center">
         <CTAButton
           as="button"
           variant="orange-warm"
