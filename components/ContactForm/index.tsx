@@ -7,6 +7,7 @@ import { FormInput, FormSelect, FormPhoneInput, FormAddressInput } from '@/compo
 import { useAddressAutocomplete, type AddressSuggestion } from '@/hooks/useAddressAutocomplete';
 import { trackLeadSubmitted } from '@/lib/analytics/trackLeadSubmitted';
 
+const PROPERTY_TYPES = ['Une maison', 'Un appartement', 'Un Immeuble', 'Un terrain', 'Autre'] as const;
 const SALE_TIMELINES = ['Au plus vite', 'Dans les 3 mois', 'Plus tard', 'Je ne souhaite pas vendre'] as const;
 
 interface FormData {
@@ -174,7 +175,17 @@ export default function ContactForm() {
       onSubmit={handleSubmit}
       className="w-full max-w-225 border-3 border-(--color-orange) rounded-xl bg-white p-8 md:p-10 text-left mt-2"
     >
-      {/* 1. Toujours visible : Adresse (autocomplete) */}
+      {/* 1. Toujours visible : Type de bien */}
+      <FormSelect
+        name="typeDeBien"
+        label="Quel type de bien avez-vous ?"
+        value={formData.typeDeBien}
+        onChange={handleChange}
+        options={PROPERTY_TYPES}
+        className="mb-6"
+      />
+
+      {/* 2. Toujours visible : Adresse (autocomplete) */}
       <FormAddressInput
         name="ville"
         label="L'adresse où se trouve votre bien ?"
@@ -190,7 +201,7 @@ export default function ContactForm() {
         className="mb-6"
       />
 
-      {/* 2. Apparaît quand l'adresse est remplie : Prénom et Nom */}
+      {/* 3. Apparaît quand l'adresse est remplie : Prénom et Nom */}
       <RevealField show={showNom}>
         <FormInput
           name="nom"
@@ -202,7 +213,7 @@ export default function ContactForm() {
         />
       </RevealField>
 
-      {/* 3. Apparaît quand le nom est rempli : E-mail */}
+      {/* 4. Apparaît quand le nom est rempli : E-mail */}
       <RevealField show={showEmail}>
         <FormInput
           name="email"
@@ -215,7 +226,7 @@ export default function ContactForm() {
         />
       </RevealField>
 
-      {/* 4. Apparaît quand l'e-mail est rempli : Téléphone portable */}
+      {/* 5. Apparaît quand l'e-mail est rempli : Téléphone portable */}
       <RevealField show={showTelephone}>
         <FormPhoneInput
           name="telephone"
@@ -227,7 +238,7 @@ export default function ContactForm() {
         />
       </RevealField>
 
-      {/* 5. Apparaît quand le téléphone est rempli : Envisagez-vous de vendre */}
+      {/* 6. Apparaît quand le téléphone est rempli : Envisagez-vous de vendre */}
       <RevealField show={showDelai}>
         <FormSelect
           name="delaiVente"
