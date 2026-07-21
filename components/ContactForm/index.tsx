@@ -119,6 +119,7 @@ export default function ContactForm() {
 
       trackLeadSubmitted();
       sessionStorage.setItem('contactData', JSON.stringify(formData));
+      window.dispatchEvent(new CustomEvent('contact-submitted'));
       setStatus('idle');
       setSubmitted(true);
       return;
@@ -134,38 +135,40 @@ export default function ContactForm() {
   const showTelephone = showEmail && formData.email.trim().length > 0;
   const showDelai = showTelephone && formData.telephone.trim().length > 0;
 
-  // Étape suivante (dans la modale) : la vidéo, débloquée après l'envoi du formulaire
+  // Étape suivante (dans la modale) : remerciement — la vidéo (avec le son) est débloquée sur la page
   if (submitted) {
     return (
       <div className="w-full max-w-225 border-3 border-(--color-orange) rounded-xl bg-white p-8 md:p-10 text-center mt-2">
-        <h2 className="font-[arista-pro,Roboto,sans-serif] text-[24px] md:text-[28px] text-(--color-dark) leading-tight mb-1">
-          Merci&nbsp;! Voici votre <span className="text-(--color-orange)">vidéo de présentation</span>
-        </h2>
-        <p className="font-[effra,Roboto,sans-serif] text-[15px] text-(--color-gray) mb-5">
-          Découvrez comment nous vendons votre bien en 30 jours, au prix convenu.
-        </p>
-        <div className="rounded-xl overflow-hidden shadow-[0_6px_24px_rgba(0,0,0,0.15)]">
-          <video
-            src="/videos/presentation.mp4"
-            poster="/images/hero/video-cover.png"
-            controls
-            autoPlay
-            playsInline
-            className="w-full block bg-black"
-          />
+        <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-(--color-orange)/10 flex items-center justify-center">
+          <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="var(--color-orange)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
         </div>
+        <h2 className="font-[arista-pro,Roboto,sans-serif] text-[24px] md:text-[28px] text-(--color-dark) leading-tight mb-1">
+          Merci&nbsp;! Votre <span className="text-(--color-orange)">vidéo est débloquée</span>
+        </h2>
+        <p className="font-[effra,Roboto,sans-serif] text-[15px] text-(--color-gray) mb-6">
+          Vous pouvez maintenant la regarder avec le son. Réservez aussi votre appel découverte avec un conseiller.
+        </p>
         <CTAButton
           as="button"
           type="button"
           variant="orange-warm"
           size="pill"
           onClick={() => router.push('/confirmation')}
-          className="w-full border-none mt-6"
+          className="w-full border-none"
         >
           <span className="font-bold text-[18px] md:text-[20px] block">
             Prendre rendez-vous avec un conseiller
           </span>
         </CTAButton>
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent('close-contact-form'))}
+          className="mt-4 font-[effra,Roboto,sans-serif] text-[15px] font-semibold text-(--color-orange) underline underline-offset-2 cursor-pointer bg-transparent border-none"
+        >
+          Regarder la vidéo avec le son
+        </button>
       </div>
     );
   }

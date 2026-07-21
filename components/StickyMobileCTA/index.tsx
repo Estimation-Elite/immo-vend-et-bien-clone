@@ -7,11 +7,16 @@ import ContactForm from '@/components/ContactForm';
 export default function StickyMobileCTA() {
   const [open, setOpen] = useState(false);
 
-  // Ouverture depuis d'autres sections via CustomEvent
+  // Ouverture / fermeture depuis d'autres sections via CustomEvent
   useEffect(() => {
-    const handler = () => setOpen(true);
-    window.addEventListener('open-contact-form', handler);
-    return () => window.removeEventListener('open-contact-form', handler);
+    const openHandler = () => setOpen(true);
+    const closeHandler = () => setOpen(false);
+    window.addEventListener('open-contact-form', openHandler);
+    window.addEventListener('close-contact-form', closeHandler);
+    return () => {
+      window.removeEventListener('open-contact-form', openHandler);
+      window.removeEventListener('close-contact-form', closeHandler);
+    };
   }, []);
 
   // Fermeture à la touche Escape + blocage du scroll de la page

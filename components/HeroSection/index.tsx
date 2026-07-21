@@ -9,7 +9,8 @@ export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoWrapRef = useRef<HTMLDivElement>(null);
   const [videoInView, setVideoInView] = useState(false);
-  const [soundOn, setSoundOn] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const [soundUnlocked, setSoundUnlocked] = useState(false);
 
   // Lazy-load : la source vidéo n'est attachée que lorsque le bloc entre dans le viewport
   useEffect(() => {
@@ -37,13 +38,21 @@ export default function HeroSection() {
     v.play().catch(() => {});
   }, [videoInView]);
 
-  const handleSound = () => {
-    const v = videoRef.current;
-    if (!v) return;
-    v.muted = false;
-    v.play().catch(() => {});
-    setSoundOn(true);
-  };
+  // Le son n'est débloqué qu'une fois le formulaire répondu (événement émis par ContactForm)
+  useEffect(() => {
+    const onContactSubmitted = () => {
+      setSoundUnlocked(true);
+      setMuted(false);
+      const v = videoRef.current;
+      if (v) {
+        v.pause();
+        v.currentTime = 0;
+        v.muted = false;
+      }
+    };
+    window.addEventListener('contact-submitted', onContactSubmitted);
+    return () => window.removeEventListener('contact-submitted', onContactSubmitted);
+  }, []);
 
   const trustindexMobileRef = useCallback((node: HTMLDivElement | null) => {
     if (!node || node.querySelector('script')) return;
@@ -96,21 +105,21 @@ export default function HeroSection() {
         <video
           ref={videoRef}
           poster="/images/hero/video-cover.png"
-          muted
-          loop={!soundOn}
+          muted={muted}
+          loop={!soundUnlocked}
           autoPlay
           playsInline
           preload="none"
-          controls={soundOn}
+          controls={soundUnlocked}
           className="w-full block bg-black"
         >
           {videoInView && <source src="/videos/presentation.mp4" type="video/mp4" />}
         </video>
-        {!soundOn && (
+        {!soundUnlocked && (
           <button
             type="button"
-            onClick={handleSound}
-            aria-label="Lire la vidéo avec le son"
+            onClick={openContactForm}
+            aria-label="Découvrir la vidéo avec le son (remplir le formulaire)"
             className="group absolute inset-0 flex items-center justify-center bg-black/10 hover:bg-black/20 transition-colors duration-200"
           >
             <span className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-(--color-orange)/90 flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.35)] transition-transform duration-200 group-hover:scale-105">
