@@ -1,11 +1,50 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import CTAButton from '@/components/CTAButton';
 
 const openContactForm = () => window.dispatchEvent(new CustomEvent('open-contact-form'));
 
 export default function HeroSection() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoWrapRef = useRef<HTMLDivElement>(null);
+  const [videoInView, setVideoInView] = useState(false);
+  const [soundOn, setSoundOn] = useState(false);
+
+  // Lazy-load : la source vidéo n'est attachée que lorsque le bloc entre dans le viewport
+  useEffect(() => {
+    const el = videoWrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVideoInView(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: '200px', threshold: 0.1 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Démarre la lecture (muette) dès que la source est attachée
+  useEffect(() => {
+    if (!videoInView) return;
+    const v = videoRef.current;
+    if (!v) return;
+    v.load();
+    v.play().catch(() => {});
+  }, [videoInView]);
+
+  const handleSound = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = false;
+    v.play().catch(() => {});
+    setSoundOn(true);
+  };
+
   const trustindexMobileRef = useCallback((node: HTMLDivElement | null) => {
     if (!node || node.querySelector('script')) return;
     const script = document.createElement('script');
@@ -49,34 +88,39 @@ export default function HeroSection() {
         <div ref={trustindexMobileRef} className="mt-2 md:hidden" />
       </div>
 
-      {/* Vidéo verrouillée : accessible uniquement après saisie des coordonnées */}
-      <button
-        type="button"
-        onClick={openContactForm}
-        aria-label="Remplir le formulaire pour accéder à la vidéo"
-        className="group mt-4 mx-auto relative block w-full max-w-[min(100%, 1140px)] cursor-pointer overflow-hidden shadow-[0_6px_24px_rgba(0,0,0,0.15)]"
+      {/* Vidéo de présentation : autoplay muet + lazy-load, bouton play (son) toujours visible */}
+      <div
+        ref={videoWrapRef}
+        className="mt-4 mx-auto relative w-full max-w-[min(100%, 1140px)] overflow-hidden shadow-[0_6px_24px_rgba(0,0,0,0.15)]"
       >
-        <img
-          src="/images/hero/video-cover.png"
-          alt=""
-          aria-hidden="true"
-          className="w-full block scale-105 blur-[6px]"
-        />
-        <span className="absolute inset-0 bg-black/55 flex flex-col items-center justify-center gap-3 px-6 text-center">
-          <span className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-(--color-orange) flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.35)] transition-transform duration-200 group-hover:scale-105">
-            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <rect x="4" y="11" width="16" height="10" rx="2" />
-              <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-            </svg>
-          </span>
-          <span className="font-[arista-pro,Roboto,sans-serif] text-white text-[20px] md:text-[26px] leading-tight max-w-md">
-            Consultez notre vidéo en rentrant vos coordonnées
-          </span>
-          <span className="font-[effra,Roboto,sans-serif] text-white/80 text-[13px] md:text-[15px] uppercase tracking-[1px]">
-            Cliquez pour débloquer &#9654;
-          </span>
-        </span>
-      </button>
+        <video
+          ref={videoRef}
+          poster="/images/hero/video-cover.png"
+          muted
+          loop={!soundOn}
+          autoPlay
+          playsInline
+          preload="none"
+          controls={soundOn}
+          className="w-full block bg-black"
+        >
+          {videoInView && <source src="/videos/presentation.mp4" type="video/mp4" />}
+        </video>
+        {!soundOn && (
+          <button
+            type="button"
+            onClick={handleSound}
+            aria-label="Lire la vidéo avec le son"
+            className="group absolute inset-0 flex items-center justify-center bg-black/10 hover:bg-black/20 transition-colors duration-200"
+          >
+            <span className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-(--color-orange)/90 flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.35)] transition-transform duration-200 group-hover:scale-105">
+              <svg viewBox="0 0 24 24" width="30" height="30" fill="#fff" aria-hidden="true">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </span>
+          </button>
+        )}
+      </div>
 
       {/* CTA sous la vidéo */}
       <div className="relative z-1 mt-4 flex justify-center">
