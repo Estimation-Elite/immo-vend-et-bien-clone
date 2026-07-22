@@ -3,12 +3,16 @@
 import { useEffect, useState } from 'react';
 import CTAButton from '@/components/CTAButton';
 import ContactForm from '@/components/ContactForm';
+import { usePageVariant } from '@/components/PageVariant';
 
 export default function StickyMobileCTA() {
+  const variant = usePageVariant();
+  const isLead = variant === 'lead';
   const [open, setOpen] = useState(false);
 
-  // Ouverture / fermeture depuis d'autres sections via CustomEvent
+  // Ouverture / fermeture depuis d'autres sections via CustomEvent (variante landing uniquement)
   useEffect(() => {
+    if (isLead) return;
     const openHandler = () => setOpen(true);
     const closeHandler = () => setOpen(false);
     window.addEventListener('open-contact-form', openHandler);
@@ -17,7 +21,7 @@ export default function StickyMobileCTA() {
       window.removeEventListener('open-contact-form', openHandler);
       window.removeEventListener('close-contact-form', closeHandler);
     };
-  }, []);
+  }, [isLead]);
 
   // Fermeture à la touche Escape + blocage du scroll de la page
   useEffect(() => {
@@ -33,6 +37,23 @@ export default function StickyMobileCTA() {
       document.body.style.overflow = previousOverflow;
     };
   }, [open]);
+
+  // Variante lead (/video) : barre fixe "Prendre rendez-vous" → /confirmation, sans modale
+  if (isLead) {
+    return (
+      <div className="fixed bottom-0 left-0 right-0 z-1000 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.15)] px-4 py-3 flex justify-center">
+        <CTAButton
+          variant="orange-warm"
+          size="pill-sm"
+          opensForm
+          location="sticky"
+          className="w-full max-w-100 text-center uppercase tracking-[1px] font-bold"
+        >
+          Prendre rendez-vous
+        </CTAButton>
+      </div>
+    );
+  }
 
   return (
     <>

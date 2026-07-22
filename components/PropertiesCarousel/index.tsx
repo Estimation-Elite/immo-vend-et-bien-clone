@@ -88,7 +88,7 @@ export default function PropertiesCarousel() {
             ))}
           </Swiper>
         </div>
-        <CTAButton>Je vérifie l&apos;éligibilité de mon bien</CTAButton>
+        <CTAButton opensForm location="properties">Je vérifie l&apos;éligibilité de mon bien</CTAButton>
       </div>
     </section>
   );

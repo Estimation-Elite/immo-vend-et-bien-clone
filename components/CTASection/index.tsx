@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import type { AnimationItem } from 'lottie-web';
 import CTAButton from '@/components/CTAButton';
 
 export default function CTASection() {
   const lottieRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let animation: any;
+    let animation: AnimationItem | undefined;
     const observer = new IntersectionObserver(
       async ([entry]) => {
         if (entry.isIntersecting && lottieRef.current) {
@@ -47,7 +48,8 @@ export default function CTASection() {
           <CTAButton
             as="button"
             variant="orange-warm"
-            onClick={() => window.dispatchEvent(new CustomEvent('open-contact-form'))}
+            opensForm
+            location="cta_section"
           >
             EN SAVOIR PLUS
           </CTAButton>

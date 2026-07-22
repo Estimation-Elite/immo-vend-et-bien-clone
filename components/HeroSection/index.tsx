@@ -2,15 +2,19 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import CTAButton from '@/components/CTAButton';
+import { usePageVariant } from '@/components/PageVariant';
+import { trackVideoPlay, trackVideoComplete } from '@/lib/analytics/trackVideo';
 
 const openContactForm = () => window.dispatchEvent(new CustomEvent('open-contact-form'));
 
 export default function HeroSection() {
+  const variant = usePageVariant();
+  const isLead = variant === 'lead';
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoWrapRef = useRef<HTMLDivElement>(null);
   const [videoInView, setVideoInView] = useState(false);
-  const [muted, setMuted] = useState(true);
-  const [soundUnlocked, setSoundUnlocked] = useState(false);
+  const videoPlayTracked = useRef(false);
 
   // Lazy-load : la source vidéo n'est attachée que lorsque le bloc entre dans le viewport
   useEffect(() => {
@@ -29,7 +33,7 @@ export default function HeroSection() {
     return () => io.disconnect();
   }, []);
 
-  // Démarre la lecture (muette) dès que la source est attachée
+  // Démarre la lecture dès que la source est attachée
   useEffect(() => {
     if (!videoInView) return;
     const v = videoRef.current;
@@ -38,21 +42,17 @@ export default function HeroSection() {
     v.play().catch(() => {});
   }, [videoInView]);
 
-  // Le son n'est débloqué qu'une fois le formulaire répondu (événement émis par ContactForm)
-  useEffect(() => {
-    const onContactSubmitted = () => {
-      setSoundUnlocked(true);
-      setMuted(false);
-      const v = videoRef.current;
-      if (v) {
-        v.pause();
-        v.currentTime = 0;
-        v.muted = false;
-      }
-    };
-    window.addEventListener('contact-submitted', onContactSubmitted);
-    return () => window.removeEventListener('contact-submitted', onContactSubmitted);
-  }, []);
+  // Suivi GTM (variante lead uniquement) : video_play (au premier play) et video_complete (fin de lecture)
+  const handleVideoPlay = useCallback(() => {
+    if (!isLead || videoPlayTracked.current) return;
+    videoPlayTracked.current = true;
+    trackVideoPlay('video');
+  }, [isLead]);
+
+  const handleVideoEnded = useCallback(() => {
+    if (!isLead) return;
+    trackVideoComplete('video');
+  }, [isLead]);
 
   const trustindexMobileRef = useCallback((node: HTMLDivElement | null) => {
     if (!node || node.querySelector('script')) return;
@@ -97,37 +97,54 @@ export default function HeroSection() {
         <div ref={trustindexMobileRef} className="mt-2 md:hidden" />
       </div>
 
-      {/* Vidéo de présentation : autoplay muet + lazy-load, bouton play (son) toujours visible */}
+      {/* Vidéo de présentation */}
       <div
         ref={videoWrapRef}
         className="mt-4 mx-auto relative w-full max-w-[min(100%, 1140px)] overflow-hidden shadow-[0_6px_24px_rgba(0,0,0,0.15)]"
       >
-        <video
-          ref={videoRef}
-          poster="/images/hero/video-cover.png"
-          muted={muted}
-          loop={!soundUnlocked}
-          autoPlay
-          playsInline
-          preload="none"
-          controls={soundUnlocked}
-          className="w-full block bg-black"
-        >
-          {videoInView && <source src="/videos/presentation.mp4" type="video/mp4" />}
-        </video>
-        {!soundUnlocked && (
-          <button
-            type="button"
-            onClick={openContactForm}
-            aria-label="Découvrir la vidéo avec le son (remplir le formulaire)"
-            className="group absolute inset-0 flex items-center justify-center bg-black/10 hover:bg-black/20 transition-colors duration-200"
+        {isLead ? (
+          // Variante lead (/video) : lecture avec le son, contrôles natifs, sans overlay ni gating
+          <video
+            ref={videoRef}
+            poster="/images/hero/video-cover.png"
+            controls
+            autoPlay
+            playsInline
+            preload="none"
+            onPlay={handleVideoPlay}
+            onEnded={handleVideoEnded}
+            className="w-full block bg-black"
           >
-            <span className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-(--color-orange)/90 flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.35)] transition-transform duration-200 group-hover:scale-105">
-              <svg viewBox="0 0 24 24" width="30" height="30" fill="#fff" aria-hidden="true">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </span>
-          </button>
+            {videoInView && <source src="/videos/presentation.mp4" type="video/mp4" />}
+          </video>
+        ) : (
+          // Variante landing : autoplay muet + lazy-load, overlay play qui ouvre le formulaire
+          <>
+            <video
+              ref={videoRef}
+              poster="/images/hero/video-cover.png"
+              muted
+              loop
+              autoPlay
+              playsInline
+              preload="none"
+              className="w-full block bg-black"
+            >
+              {videoInView && <source src="/videos/presentation.mp4" type="video/mp4" />}
+            </video>
+            <button
+              type="button"
+              onClick={openContactForm}
+              aria-label="Découvrir la vidéo avec le son (remplir le formulaire)"
+              className="group absolute inset-0 flex items-center justify-center bg-black/10 hover:bg-black/20 transition-colors duration-200"
+            >
+              <span className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-(--color-orange)/90 flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.35)] transition-transform duration-200 group-hover:scale-105">
+                <svg viewBox="0 0 24 24" width="30" height="30" fill="#fff" aria-hidden="true">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </span>
+            </button>
+          </>
         )}
       </div>
 
@@ -137,7 +154,8 @@ export default function HeroSection() {
           as="button"
           variant="orange-warm"
           size="pill"
-          onClick={openContactForm}
+          opensForm
+          location="hero"
           className="uppercase tracking-[1px] font-bold px-12"
         >
           En savoir plus

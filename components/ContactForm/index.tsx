@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import CTAButton from '@/components/CTAButton';
 import { FormInput, FormSelect, FormPhoneInput, FormAddressInput } from '@/components/FormField';
 import { useAddressAutocomplete, type AddressSuggestion } from '@/hooks/useAddressAutocomplete';
 import { trackLeadSubmitted } from '@/lib/analytics/trackLeadSubmitted';
+import { trackFormStart } from '@/lib/analytics/trackFormStart';
 
 const PROPERTY_TYPES = ['Une maison', 'Un appartement', 'Un Immeuble', 'Un terrain', 'Autre'] as const;
 const SALE_TIMELINES = ['Au plus vite', 'Dans les 3 mois', 'Plus tard', 'Je ne souhaite pas vendre'] as const;
@@ -58,7 +59,14 @@ export default function ContactForm() {
   });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const formStartedRef = useRef(false);
+
+  // GTM form_start : déclenché une seule fois à la première interaction utilisateur
+  const handleFirstInteraction = () => {
+    if (formStartedRef.current) return;
+    formStartedRef.current = true;
+    trackFormStart();
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -117,11 +125,14 @@ export default function ContactForm() {
         throw new Error(data.error || 'Une erreur est survenue.');
       }
 
-      trackLeadSubmitted();
+      trackLeadSubmitted({
+        property_type: formData.typeDeBien,
+        sale_timeline: formData.delaiVente,
+        city: formData.ville,
+      });
       sessionStorage.setItem('contactData', JSON.stringify(formData));
-      window.dispatchEvent(new CustomEvent('contact-submitted'));
       setStatus('idle');
-      setSubmitted(true);
+      router.push('/video');
       return;
     } catch (err) {
       setStatus('error');
@@ -135,47 +146,10 @@ export default function ContactForm() {
   const showTelephone = showEmail && formData.email.trim().length > 0;
   const showDelai = showTelephone && formData.telephone.trim().length > 0;
 
-  // Étape suivante (dans la modale) : remerciement — la vidéo (avec le son) est débloquée sur la page
-  if (submitted) {
-    return (
-      <div className="w-full max-w-225 border-3 border-(--color-orange) rounded-xl bg-white p-8 md:p-10 text-center mt-2">
-        <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-(--color-orange)/10 flex items-center justify-center">
-          <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="var(--color-orange)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M20 6L9 17l-5-5" />
-          </svg>
-        </div>
-        <h2 className="font-[arista-pro,Roboto,sans-serif] text-[24px] md:text-[28px] text-(--color-dark) leading-tight mb-1">
-          Merci&nbsp;! Votre <span className="text-(--color-orange)">vidéo est débloquée</span>
-        </h2>
-        <p className="font-[effra,Roboto,sans-serif] text-[15px] text-(--color-gray) mb-6">
-          Vous pouvez maintenant la regarder avec le son. Réservez aussi votre appel découverte avec un conseiller.
-        </p>
-        <CTAButton
-          as="button"
-          type="button"
-          variant="orange-warm"
-          size="pill"
-          onClick={() => router.push('/confirmation')}
-          className="w-full border-none"
-        >
-          <span className="font-bold text-[18px] md:text-[20px] block">
-            Prendre rendez-vous avec un conseiller
-          </span>
-        </CTAButton>
-        <button
-          type="button"
-          onClick={() => window.dispatchEvent(new CustomEvent('close-contact-form'))}
-          className="mt-4 font-[effra,Roboto,sans-serif] text-[15px] font-semibold text-(--color-orange) underline underline-offset-2 cursor-pointer bg-transparent border-none"
-        >
-          Regarder la vidéo avec le son
-        </button>
-      </div>
-    );
-  }
-
   return (
     <form
       onSubmit={handleSubmit}
+      onFocusCapture={handleFirstInteraction}
       className="w-full max-w-225 border-3 border-(--color-orange) rounded-xl bg-white p-8 md:p-10 text-left mt-2"
     >
       {/* 1. Toujours visible : Type de bien */}

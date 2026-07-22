@@ -26,7 +26,7 @@ export default function TestimonialsSection() {
           98% de nos clients satisfaits par nos conseillers, alors pourquoi pas vous ?
         </p>
         <div className="mb-8" id="trustindex-testimonials"></div>
-        <CTAButton variant="white">Je vérifie l&apos;éligibilité de mon bien</CTAButton>
+        <CTAButton variant="white" opensForm location="testimonials">Je vérifie l&apos;éligibilité de mon bien</CTAButton>
       </div>
     </section>
   );
