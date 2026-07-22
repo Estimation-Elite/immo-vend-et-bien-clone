@@ -43,6 +43,11 @@ export default function ConfirmationPage() {
     sessionStorage.removeItem('contactData');
   };
 
+  // Progression réelle : l'étape "infos" n'est PAS la dernière (le choix du créneau suit).
+  const progress = confirmed
+    ? { width: '95%', pct: '95%', label: 'Dernière étape : votre créneau' }
+    : { width: '80%', pct: '80%', label: 'Plus qu’une étape...' };
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
@@ -101,15 +106,18 @@ export default function ConfirmationPage() {
               </div>
             </div>
 
-            {/* Barre de progression */}
+            {/* Barre de progression (dynamique selon l'étape) */}
             <div className="mb-8 max-w-sm">
               <div className="relative h-7 bg-white overflow-hidden">
-                <div className="h-full bg-(--color-orange) flex items-center" style={{ width: '80%' }}>
-                  <span className="font-[effra,Roboto,sans-serif] text-[12px] text-white font-semibold pl-3">
-                    Derni&egrave;re &eacute;tape...
+                <div
+                  className="h-full bg-(--color-orange) flex items-center transition-all duration-500 ease-out"
+                  style={{ width: progress.width }}
+                >
+                  <span className="font-[effra,Roboto,sans-serif] text-[12px] text-white font-semibold pl-3 whitespace-nowrap">
+                    {progress.label}
                   </span>
                   <span className="font-[effra,Roboto,sans-serif] text-[12px] text-white font-bold ml-auto pr-3">
-                    80%
+                    {progress.pct}
                   </span>
                 </div>
               </div>
