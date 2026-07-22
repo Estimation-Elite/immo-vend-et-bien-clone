@@ -32,6 +32,7 @@ function getInitialData(): ContactData {
 export default function ConfirmationPage() {
   const [data, setData] = useState<ContactData>(getInitialData);
   const [confirmed, setConfirmed] = useState(false);
+  const [pickerStep, setPickerStep] = useState<'calendar' | 'slots' | 'done'>('calendar');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -43,10 +44,14 @@ export default function ConfirmationPage() {
     sessionStorage.removeItem('contactData');
   };
 
-  // Progression réelle : l'étape "infos" n'est PAS la dernière (le choix du créneau suit).
-  const progress = confirmed
-    ? { width: '95%', pct: '95%', label: 'Dernière étape : votre créneau' }
-    : { width: '80%', pct: '80%', label: 'Plus qu’une étape...' };
+  // Progression réelle sur les 4 étapes : coordonnées → date → horaire → RDV confirmé.
+  const progress = !confirmed
+    ? { width: '75%', pct: '75%', label: 'Vos coordonnées' }
+    : pickerStep === 'calendar'
+      ? { width: '85%', pct: '85%', label: 'Choisir une date' }
+      : pickerStep === 'slots'
+        ? { width: '93%', pct: '93%', label: 'Choisir un horaire' }
+        : { width: '100%', pct: '100%', label: 'Rendez-vous confirmé !' };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -173,6 +178,7 @@ export default function ConfirmationPage() {
                 <AppointmentPicker
                   onBack={() => setConfirmed(false)}
                   contactData={data}
+                  onStepChange={setPickerStep}
                 />
               )}
             </div>

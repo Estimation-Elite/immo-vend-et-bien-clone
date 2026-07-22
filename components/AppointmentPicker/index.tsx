@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowLeft, ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { trackAppointmentScheduled } from '@/lib/analytics/trackAppointmentScheduled';
 
@@ -56,18 +56,26 @@ interface ContactData {
   email: string;
 }
 
+type PickerStep = 'calendar' | 'slots' | 'done';
+
 interface Props {
   onBack: () => void;
   contactData: ContactData;
+  onStepChange?: (step: PickerStep) => void;
 }
 
-export default function AppointmentPicker({ onBack, contactData }: Props) {
+export default function AppointmentPicker({ onBack, contactData, onStepChange }: Props) {
   const today = new Date();
   const [viewMonth, setViewMonth] = useState(today.getMonth());
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
-  const [step, setStep] = useState<'calendar' | 'slots' | 'done'>('calendar');
+  const [step, setStep] = useState<PickerStep>('calendar');
+
+  // Remonte l'étape courante au parent (barre de progression)
+  useEffect(() => {
+    onStepChange?.(step);
+  }, [step, onStepChange]);
 
   // --- Calendar helpers ---
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
