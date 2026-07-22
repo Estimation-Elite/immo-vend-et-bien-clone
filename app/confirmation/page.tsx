@@ -44,13 +44,13 @@ export default function ConfirmationPage() {
     sessionStorage.removeItem('contactData');
   };
 
-  // Progression réelle sur les 4 étapes : coordonnées → date → horaire → RDV confirmé.
+  // Progression sur les 4 étapes de cette page (paliers réguliers).
   const progress = !confirmed
-    ? { width: '75%', pct: '75%', label: 'Vos coordonnées' }
+    ? { width: '25%', pct: '25%', label: 'Vos coordonnées' }
     : pickerStep === 'calendar'
-      ? { width: '85%', pct: '85%', label: 'Choisir une date' }
+      ? { width: '50%', pct: '50%', label: 'Choisir une date' }
       : pickerStep === 'slots'
-        ? { width: '93%', pct: '93%', label: 'Choisir un horaire' }
+        ? { width: '75%', pct: '75%', label: 'Choisir un horaire' }
         : { width: '100%', pct: '100%', label: 'Rendez-vous confirmé !' };
 
   return (
@@ -113,18 +113,19 @@ export default function ConfirmationPage() {
 
             {/* Barre de progression (dynamique selon l'étape) */}
             <div className="mb-8 max-w-sm">
-              <div className="relative h-7 bg-white overflow-hidden">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="font-[effra,Roboto,sans-serif] text-[13px] font-semibold text-(--color-dark)">
+                  {progress.label}
+                </span>
+                <span className="font-[effra,Roboto,sans-serif] text-[13px] font-bold text-(--color-orange)">
+                  {progress.pct}
+                </span>
+              </div>
+              <div className="relative h-2.5 bg-black/10 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-(--color-orange) flex items-center transition-all duration-500 ease-out"
+                  className="h-full bg-(--color-orange) rounded-full transition-all duration-500 ease-out"
                   style={{ width: progress.width }}
-                >
-                  <span className="font-[effra,Roboto,sans-serif] text-[12px] text-white font-semibold pl-3 whitespace-nowrap">
-                    {progress.label}
-                  </span>
-                  <span className="font-[effra,Roboto,sans-serif] text-[12px] text-white font-bold ml-auto pr-3">
-                    {progress.pct}
-                  </span>
-                </div>
+                />
               </div>
             </div>
 
