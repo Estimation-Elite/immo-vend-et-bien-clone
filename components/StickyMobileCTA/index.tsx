@@ -47,7 +47,7 @@ export default function StickyMobileCTA() {
           size="pill-sm"
           opensForm
           location="sticky"
-          className="w-full max-w-100 text-center uppercase tracking-[1px] font-bold"
+          className="w-full max-w-100 text-center tracking-[1px] font-bold"
         >
           Prendre rendez-vous
         </CTAButton>
@@ -63,8 +63,9 @@ export default function StickyMobileCTA() {
           as="button"
           variant="orange-warm"
           size="pill-sm"
-          onClick={() => setOpen(true)}
-          className="w-full max-w-100 text-center uppercase tracking-[1px] font-bold"
+          opensForm
+          location="sticky"
+          className="w-full max-w-100 text-center tracking-[1px] font-bold"
         >
           En savoir plus
         </CTAButton>

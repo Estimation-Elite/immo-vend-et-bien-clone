@@ -56,12 +56,23 @@ export default function CTAButton({
 }: CTAButtonProps) {
   const pageVariant = usePageVariant();
 
-  const classes = `${base} ${variants[variant]} ${sizes[size]} ${disabled ? 'opacity-60 cursor-not-allowed' : ''} ${className}`;
-
   // Un CTA "ouvre le formulaire" soit explicitement (opensForm), soit par défaut
   // (ancre pointant vers #header-form sans onClick personnalisé — comportement historique).
   const isFormOpener =
     opensForm === true || (as === 'a' && href === '#header-form' && !onClick && opensForm !== false);
+
+  // Libellé unifié de TOUS les CTA d'ouverture de formulaire, selon la page :
+  // - landing (avant le formulaire) : "Découvrir la vidéo Garantie vendeur à 30 jours"
+  // - lead (/video, après le formulaire) : "Prendre rendez-vous"
+  const formOpenerLabel =
+    pageVariant === 'lead' ? 'Prendre rendez-vous' : 'Découvrir la vidéo Garantie vendeur à 30 jours';
+  const content = isFormOpener ? formOpenerLabel : children;
+
+  // Ces libellés peuvent être longs : on autorise le retour à la ligne et on borne la largeur.
+  const formOpenerExtra = isFormOpener
+    ? ' whitespace-normal text-center leading-snug max-w-[min(100%,26rem)]'
+    : '';
+  const classes = `${base} ${variants[variant]} ${sizes[size]} ${disabled ? 'opacity-60 cursor-not-allowed' : ''} ${className}${formOpenerExtra}`;
 
   // En variante lead, tout CTA d'ouverture de formulaire devient un CTA "Prendre rendez-vous".
   if (isFormOpener && pageVariant === 'lead') {
@@ -71,7 +82,7 @@ export default function CTAButton({
     };
     return (
       <Link href="/confirmation" onClick={handleLeadClick} className={classes}>
-        Prendre rendez-vous
+        {content}
       </Link>
     );
   }
@@ -93,7 +104,7 @@ export default function CTAButton({
         onClick={handleButtonClick}
         className={classes}
       >
-        {children}
+        {content}
       </button>
     );
   }
@@ -113,7 +124,7 @@ export default function CTAButton({
 
   return (
     <a href={href} onClick={handleAnchorClick} className={classes}>
-      {children}
+      {content}
     </a>
   );
 }

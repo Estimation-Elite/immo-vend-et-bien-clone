@@ -156,7 +156,7 @@ export default function HeroSection() {
           size="pill"
           opensForm
           location="hero"
-          className="uppercase tracking-[1px] font-bold px-12"
+          className="tracking-[1px] font-bold px-8"
         >
           En savoir plus
         </CTAButton>
