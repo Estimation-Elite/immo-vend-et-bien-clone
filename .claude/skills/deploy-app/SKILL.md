@@ -27,12 +27,12 @@ Server passwords are stored in the `.servers` file at the repo root. Read it to 
 A `Dockerfile` must exist at the project root. If it doesn't, create one before deploying:
 
 ```dockerfile
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --no-audit --no-fund
 
 FROM base AS builder
 WORKDIR /app
