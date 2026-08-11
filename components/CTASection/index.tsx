@@ -55,7 +55,7 @@ export default function CTASection() {
           </CTAButton>
           <span className="inline-flex items-center gap-2 bg-[#DE6539]/10 text-[#DE6539] font-[effra,Roboto,sans-serif] font-semibold text-[15px] px-4 py-1.5 rounded-full uppercase tracking-wide">
             <span className="w-2 h-2 rounded-full bg-[#DE6539] animate-pulse" aria-hidden="true"></span>
-            Offre limitée&nbsp;: 8 places disponibles
+            Offre limitée&nbsp;: 8 réservations possibles
           </span>
         </div>
       </div>

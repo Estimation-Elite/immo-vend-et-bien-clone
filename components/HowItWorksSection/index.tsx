@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 
 
 interface Step {
   lottie: string;
   title: string;
-  text: string;
+  text: ReactNode;
 }
 
 const steps: Step[] = [
@@ -17,13 +17,15 @@ const steps: Step[] = [
   },
   {
     lottie: 'https://lottie.host/398fb822-80c6-456e-b0aa-16db0e40e5c7/sR0EyLKKhx.json',
-    title: 'Prix de vente optimal',
+    title: 'Prix de vente optimisé',
     text: 'Bénéficiez de notre Triple Estimation & maximisez la valeur de votre bien.',
   },
   {
     lottie: 'https://lottie.host/624aef38-a7c3-4371-892a-1c3be7c7fed6/bb6DWwEOlS.json',
     title: 'Réseaux d\u2019acquéreurs',
-    text: 'Validez notre plan d\u2019action de vente & activez notre réseau d\u2019acquéreurs exclusifs.',
+    text: (
+      <>Validez notre plan d&rsquo;action de vente &amp; activez notre r&eacute;seau <strong>d&rsquo;acqu&eacute;reurs exclusifs.</strong></>
+    ),
   },
   {
     lottie: 'https://lottie.host/f8b5b868-ef2c-4cb7-a722-d49a265d85b5/ViLARkuAgj.json',
