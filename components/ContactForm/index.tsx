@@ -253,10 +253,10 @@ export default function ContactForm() {
         disabled={status === 'submitting'}
         className="w-full border-none"
       >
-        <span className="font-bold text-[18px] md:text-[20px] block">
+        <span className="font-bold text-[21px] md:text-[26px] leading-tight block">
           {status === 'submitting'
             ? 'Envoi en cours...'
-            : 'Découvrir la vidéo Garantie vendeur à 30 jours'}
+            : 'Voir la vidéo Garantie vendeur à 30 jours'}
         </span>
         <span className="text-[14px] text-white/80 block mt-0.5">
           (gratuit et sans engagement)

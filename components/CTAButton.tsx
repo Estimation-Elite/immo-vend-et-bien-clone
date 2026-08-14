@@ -62,10 +62,10 @@ export default function CTAButton({
     opensForm === true || (as === 'a' && href === '#header-form' && !onClick && opensForm !== false);
 
   // Libellé unifié de TOUS les CTA d'ouverture de formulaire, selon la page :
-  // - landing (avant le formulaire) : "Découvrir la vidéo Garantie vendeur à 30 jours"
+  // - landing (avant le formulaire) : "En savoir plus en VIDÉO"
   // - lead (/video, après le formulaire) : "Prendre rendez-vous"
   const formOpenerLabel =
-    pageVariant === 'lead' ? 'Prendre rendez-vous' : 'Découvrir la vidéo Garantie vendeur à 30 jours';
+    pageVariant === 'lead' ? 'Prendre rendez-vous' : 'En savoir plus en VIDÉO';
   const content = isFormOpener ? formOpenerLabel : children;
 
   // Ces libellés peuvent être longs : on autorise le retour à la ligne et on borne la largeur.
