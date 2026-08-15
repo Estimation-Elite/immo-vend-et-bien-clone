@@ -6,8 +6,8 @@ export default function ComparisonSection() {
           Comment souhaitez-vous vendre&nbsp;?
         </h2>
       </div>
-      <section className="bg-(--color-teal) px-5 py-8 md:px-10 md:py-10 lg:px-25 lg:py-10">
-        <div className="max-w-250 mx-auto flex flex-col md:flex-row gap-6 md:gap-7.5 items-stretch">
+      <section className="bg-(--color-teal) px-5 py-8 md:px-10 md:py-10 lg:px-10 lg:py-12">
+        <div className="max-w-300 mx-auto flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
           {/* Colonne Vente Traditionnelle */}
           <div className="flex-1 flex flex-col p-[24px_20px] md:p-8 rounded-lg bg-(--color-gray)">
             <div className="flex items-center gap-4 mb-4">
@@ -53,7 +53,7 @@ export default function ComparisonSection() {
               <img
                 src="/images/logo-white-horizontal.png"
                 alt="Vend & Bien"
-                className="max-w-45 h-auto"
+                className="max-w-64 md:max-w-72 h-auto"
               />
             </div>
             <ul className="list-none p-0 m-0 flex flex-col gap-3">

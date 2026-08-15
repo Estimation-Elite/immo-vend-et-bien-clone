@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { trackAppointmentScheduled } from '@/lib/analytics/trackAppointmentScheduled';
+import { FormPhoneInput } from '@/components/FormField';
 
 const DAYS_FR = ['Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.', 'Dim.'];
 const MONTHS_FR = [
@@ -56,10 +57,10 @@ interface ContactData {
   email: string;
 }
 
-type PickerStep = 'calendar' | 'slots' | 'done';
+type PickerStep = 'calendar' | 'slots' | 'phone' | 'done';
 
 interface Props {
-  onBack: () => void;
+  onBack?: () => void;
   contactData: ContactData;
   onStepChange?: (step: PickerStep) => void;
 }
@@ -70,6 +71,7 @@ export default function AppointmentPicker({ onBack, contactData, onStepChange }:
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [phone, setPhone] = useState(contactData.telephone || '');
   const [step, setStep] = useState<PickerStep>('calendar');
 
   // Remonte l'étape courante au parent (barre de progression)
@@ -112,6 +114,7 @@ export default function AppointmentPicker({ onBack, contactData, onStepChange }:
     try {
       const body = {
         ...contactData,
+        telephone: phone,
         rdv_date: `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`,
         rdv_heure: selectedSlot,
       }
@@ -157,7 +160,7 @@ export default function AppointmentPicker({ onBack, contactData, onStepChange }:
 
     return (
       <div>
-        <BackButton onClick={onBack} />
+        {onBack && <BackButton onClick={onBack} />}
 
         <div className="flex items-center justify-center gap-6 mt-4 mb-4">
           <button
@@ -235,16 +238,58 @@ export default function AppointmentPicker({ onBack, contactData, onStepChange }:
                 {isSelected && (
                   <button
                     type="button"
-                    onClick={handleConfirm}
+                    onClick={() => setStep('phone')}
                     className="flex-1 py-3 rounded-md border-none bg-(--color-orange) text-white font-bold text-[15px] cursor-pointer hover:bg-[#c9552e] transition-colors"
                   >
-                    Confirmer
+                    Continuer
                   </button>
                 )}
               </div>
             );
           })}
         </div>
+      </div>
+    );
+  }
+
+  // --- Phone confirmation view (dernière étape : uniquement le numéro) ---
+  if (step === 'phone' && selectedDate && selectedSlot) {
+    const dayName = WEEKDAYS_LONG_FR[selectedDate.getDay()];
+    const dateStr = `${selectedDate.getDate()} ${MONTHS_FR[selectedDate.getMonth()].toLowerCase()} ${selectedDate.getFullYear()}`;
+    return (
+      <div>
+        <div className="flex items-center mb-4">
+          <BackButton onClick={() => setStep('slots')} />
+          <div className="mx-auto text-center">
+            <p className="text-xl font-bold text-(--color-dark) m-0">
+              <span className="capitalize">{dayName}</span> {dateStr}
+            </p>
+            <p className="text-sm text-[#8c8c8c] m-0">&agrave; {selectedSlot}</p>
+          </div>
+        </div>
+
+        <p className="font-[effra,Roboto,sans-serif] text-[16px] text-(--color-dark) text-center mb-5">
+          Confirmez votre num&eacute;ro de t&eacute;l&eacute;phone pour valider le rendez-vous.
+        </p>
+
+        <FormPhoneInput
+          id="rdv-telephone"
+          name="telephone"
+          label="Num&eacute;ro de t&eacute;l&eacute;phone"
+          required
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          className="mb-6"
+        />
+
+        <button
+          type="button"
+          onClick={handleConfirm}
+          disabled={phone.trim().length === 0}
+          className="w-full py-4 rounded-full border-none bg-(--color-orange) text-white font-bold text-[16px] cursor-pointer hover:bg-[#c9552e] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          Confirmer le rendez-vous
+        </button>
       </div>
     );
   }

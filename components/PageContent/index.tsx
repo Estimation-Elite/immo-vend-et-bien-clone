@@ -47,14 +47,14 @@ export default function PageContent({ variant }: { variant: PageVariant }) {
           <img
             src="/images/agents/alessia-buste.png"
             alt=""
-            className="hidden lg:block absolute left-0 bottom-0 h-3/5 max-h-120 z-1 object-contain object-[bottom_left]"
+            className="hidden lg:block absolute left-2 xl:left-10 bottom-0 h-4/5 max-h-140 z-1 object-contain object-[bottom_left] scale-x-[-1]"
             aria-hidden="true"
           />
           {/* Véronique — buste détouré, ancré en bas à droite du bloc */}
           <img
             src="/images/agents/veronique-buste.png"
             alt=""
-            className="hidden lg:block absolute right-0 bottom-0 h-3/5 max-h-120 z-1 object-contain object-[bottom_right]"
+            className="hidden lg:block absolute right-2 xl:right-10 bottom-0 h-4/5 max-h-140 z-1 object-contain object-[bottom_right]"
             aria-hidden="true"
           />
         </div>
