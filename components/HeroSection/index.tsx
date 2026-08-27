@@ -1,16 +1,58 @@
 'use client';
 
-import { useRef, useState, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import CTAButton from '@/components/CTAButton';
+import { usePageVariant } from '@/components/PageVariant';
+import { trackVideoPlay, trackVideoComplete } from '@/lib/analytics/trackVideo';
+
+const openContactForm = () => window.dispatchEvent(new CustomEvent('open-contact-form'));
 
 export default function HeroSection() {
-  const [playing, setPlaying] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const variant = usePageVariant();
+  const isLead = variant === 'lead';
 
-  const handlePlay = () => {
-    setPlaying(true);
-    videoRef.current?.play();
-  };
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoWrapRef = useRef<HTMLDivElement>(null);
+  const [videoInView, setVideoInView] = useState(false);
+  const videoPlayTracked = useRef(false);
+
+  // Lazy-load : la source vidéo n'est attachée que lorsque le bloc entre dans le viewport
+  useEffect(() => {
+    const el = videoWrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVideoInView(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: '200px', threshold: 0.1 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Démarre la lecture dès que la source est attachée
+  useEffect(() => {
+    if (!videoInView) return;
+    const v = videoRef.current;
+    if (!v) return;
+    v.load();
+    v.play().catch(() => {});
+  }, [videoInView]);
+
+  // Suivi GTM (variante lead uniquement) : video_play (au premier play) et video_complete (fin de lecture)
+  const handleVideoPlay = useCallback(() => {
+    if (!isLead || videoPlayTracked.current) return;
+    videoPlayTracked.current = true;
+    trackVideoPlay('video');
+  }, [isLead]);
+
+  const handleVideoEnded = useCallback(() => {
+    if (!isLead) return;
+    trackVideoComplete('video');
+  }, [isLead]);
 
   const trustindexMobileRef = useCallback((node: HTMLDivElement | null) => {
     if (!node || node.querySelector('script')) return;
@@ -39,40 +81,68 @@ export default function HeroSection() {
           Nous vendons votre bien<br className="hidden md:inline" />
           {' '}<span className="text-(--color-orange)">en 30 jours</span> et <span className="text-(--color-orange)">au prix convenu</span>
         </h1>
-        <p className="font-[effra,Roboto,sans-serif] text-[18px] md:text-[20px] text-(--color-dark) m-0 leading-[1.3]">
-          Sinon jusqu&apos;à{' '}
-          <strong className="text-[24px] md:text-[26px] lg:text-[28px]">100% des honoraires offerts</strong>
+        <p className="font-[effra,Roboto,sans-serif] text-[20px] md:text-[22px] text-(--color-dark) m-0 leading-[1.3]">
+          ou jusqu&apos;à{' '}
+          <strong className="text-[26px] md:text-[28px] lg:text-[30px]">100% des honoraires offerts</strong>
         </p>
         <div className="mt-1 inline-flex items-center gap-2 rounded-full border-2 border-(--color-orange) bg-white/90 px-4 py-1.5">
           <span className="w-2 h-2 rounded-full bg-(--color-orange) animate-pulse" aria-hidden="true" />
           <span className="font-[effra,Roboto,sans-serif] text-[13px] md:text-[14px] font-bold uppercase tracking-[0.5px] text-(--color-orange)">
-            Offre limitée : 8 places disponibles
+            Offre limitée : 8 réservations possibles
           </span>
         </div>
-        <p className="font-[effra,Roboto,sans-serif] text-[11px] text-(--color-dark)/50 m-0">
-          13 visiteurs en ligne
-        </p>
         <div ref={trustindexMobileRef} className="mt-2 md:hidden" />
       </div>
 
-      {/* Vidéo / bouton découvrir */}
+      {/* Vidéo de présentation */}
       <div
-        className="mt-4 mx-auto relative w-full max-w-[min(100%, 1140px)] cursor-pointer overflow-hidden shadow-[0_6px_24px_rgba(0,0,0,0.15)]"
-        onClick={!playing ? handlePlay : undefined}
+        ref={videoWrapRef}
+        className="mt-4 mx-auto relative w-full max-w-[min(100%, 1140px)] overflow-hidden shadow-[0_6px_24px_rgba(0,0,0,0.15)]"
       >
-        {!playing && (
-          <img
-            src="/images/hero/video-cover.png"
-            alt="Cliquez pour découvrir Vend & Bien"
-            className="w-full block transition-transform duration-200 hover:scale-[1.02]"
-          />
+        {isLead ? (
+          // Variante lead (/video) : lecture avec le son, contrôles natifs, sans overlay ni gating
+          <video
+            ref={videoRef}
+            poster="/images/hero/video-cover.png"
+            controls
+            autoPlay
+            playsInline
+            preload="none"
+            onPlay={handleVideoPlay}
+            onEnded={handleVideoEnded}
+            className="w-full block bg-black"
+          >
+            {videoInView && <source src="/videos/presentation.mp4" type="video/mp4" />}
+          </video>
+        ) : (
+          // Variante landing : autoplay muet + lazy-load, overlay play qui ouvre le formulaire
+          <>
+            <video
+              ref={videoRef}
+              poster="/images/hero/video-cover.png"
+              muted
+              loop
+              autoPlay
+              playsInline
+              preload="none"
+              className="w-full block bg-black"
+            >
+              {videoInView && <source src="/videos/presentation.mp4" type="video/mp4" />}
+            </video>
+            <button
+              type="button"
+              onClick={openContactForm}
+              aria-label="Découvrir la vidéo avec le son (remplir le formulaire)"
+              className="group absolute inset-0 flex items-center justify-center bg-black/10 hover:bg-black/20 transition-colors duration-200"
+            >
+              <span className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-(--color-orange)/90 flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.35)] transition-transform duration-200 group-hover:scale-105">
+                <svg viewBox="0 0 24 24" width="30" height="30" fill="#fff" aria-hidden="true">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </span>
+            </button>
+          </>
         )}
-        <video
-          ref={videoRef}
-          src="/videos/presentation.mp4"
-          controls={playing}
-          className={`w-full ${playing ? 'block' : 'hidden'}`}
-        />
       </div>
 
       {/* CTA sous la vidéo */}
@@ -81,8 +151,9 @@ export default function HeroSection() {
           as="button"
           variant="orange-warm"
           size="pill"
-          onClick={() => window.dispatchEvent(new CustomEvent('open-contact-form'))}
-          className="uppercase tracking-[1px] font-bold px-12"
+          opensForm
+          location="hero"
+          className="tracking-[1px] font-bold px-8"
         >
           En savoir plus
         </CTAButton>

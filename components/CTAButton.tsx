@@ -1,5 +1,9 @@
 'use client';
 
+import Link from 'next/link';
+import { usePageVariant } from '@/components/PageVariant';
+import { trackRdvCtaClick } from '@/lib/analytics/trackRdvCtaClick';
+
 const base = 'font-[effra,Roboto,sans-serif] font-semibold cursor-pointer no-underline inline-block transition-colors duration-200';
 
 const variants = {
@@ -27,6 +31,14 @@ interface CTAButtonProps {
   className?: string;
   children: React.ReactNode;
   onClick?: (e: React.MouseEvent) => void;
+  /**
+   * Marque ce CTA comme "ouvre le formulaire de contact" (capture de lead).
+   * En variante landing : ouvre la modale de contact.
+   * En variante lead (/video) : affiche "Prendre rendez-vous" et redirige vers /confirmation.
+   */
+  opensForm?: boolean;
+  /** Emplacement du CTA, poussé dans l'événement GTM rdv_cta_click (variante lead). */
+  location?: string;
 }
 
 export default function CTAButton({
@@ -39,18 +51,60 @@ export default function CTAButton({
   className = '',
   children,
   onClick,
+  opensForm,
+  location = 'cta',
 }: CTAButtonProps) {
-  const classes = `${base} ${variants[variant]} ${sizes[size]} ${disabled ? 'opacity-60 cursor-not-allowed' : ''} ${className}`;
+  const pageVariant = usePageVariant();
+
+  // Un CTA "ouvre le formulaire" soit explicitement (opensForm), soit par défaut
+  // (ancre pointant vers #header-form sans onClick personnalisé — comportement historique).
+  const isFormOpener =
+    opensForm === true || (as === 'a' && href === '#header-form' && !onClick && opensForm !== false);
+
+  // Libellé unifié de TOUS les CTA d'ouverture de formulaire, selon la page :
+  // - landing (avant le formulaire) : "En savoir plus en VIDÉO"
+  // - lead (/video, après le formulaire) : "Prendre rendez-vous"
+  const formOpenerLabel =
+    pageVariant === 'lead' ? 'Prendre rendez-vous' : 'En savoir plus en VIDÉO';
+  const content = isFormOpener ? formOpenerLabel : children;
+
+  // Ces libellés peuvent être longs : on autorise le retour à la ligne et on borne la largeur.
+  const formOpenerExtra = isFormOpener
+    ? ' whitespace-normal text-center leading-snug max-w-[min(100%,26rem)]'
+    : '';
+  const classes = `${base} ${variants[variant]} ${sizes[size]} ${disabled ? 'opacity-60 cursor-not-allowed' : ''} ${className}${formOpenerExtra}`;
+
+  // En variante lead, tout CTA d'ouverture de formulaire devient un CTA "Prendre rendez-vous".
+  if (isFormOpener && pageVariant === 'lead') {
+    const handleLeadClick = (e: React.MouseEvent) => {
+      trackRdvCtaClick(location);
+      if (onClick) onClick(e);
+    };
+    return (
+      <Link href="/confirmation" onClick={handleLeadClick} className={classes}>
+        {content}
+      </Link>
+    );
+  }
+
+  const openContactForm = () => window.dispatchEvent(new CustomEvent('open-contact-form'));
 
   if (as === 'button') {
+    const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (isFormOpener && !onClick) {
+        openContactForm();
+        return;
+      }
+      (onClick as ((e: React.MouseEvent<HTMLButtonElement>) => void) | undefined)?.(e);
+    };
     return (
       <button
         type={type || 'button'}
         disabled={disabled}
-        onClick={onClick as (e: React.MouseEvent<HTMLButtonElement>) => void}
+        onClick={handleButtonClick}
         className={classes}
       >
-        {children}
+        {content}
       </button>
     );
   }
@@ -62,15 +116,15 @@ export default function CTAButton({
       (onClick as (e: React.MouseEvent<HTMLAnchorElement>) => void)(e);
       return;
     }
-    if (href === '#header-form') {
+    if (isFormOpener) {
       e.preventDefault();
-      window.dispatchEvent(new CustomEvent('open-contact-form'));
+      openContactForm();
     }
   };
 
   return (
     <a href={href} onClick={handleAnchorClick} className={classes}>
-      {children}
+      {content}
     </a>
   );
 }

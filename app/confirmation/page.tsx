@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
 import CTAButton from '@/components/CTAButton';
-import { FormInput, FormPhoneInput } from '@/components/FormField';
 import AppointmentPicker from '@/components/AppointmentPicker';
 
 interface ContactData {
@@ -30,18 +29,18 @@ function getInitialData(): ContactData {
 }
 
 export default function ConfirmationPage() {
-  const [data, setData] = useState<ContactData>(getInitialData);
-  const [confirmed, setConfirmed] = useState(false);
+  const [data] = useState<ContactData>(getInitialData);
+  const [pickerStep, setPickerStep] = useState<'calendar' | 'slots' | 'phone' | 'done'>('calendar');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleContinue = (e: React.FormEvent) => {
-    e.preventDefault();
-    setConfirmed(true);
-    sessionStorage.removeItem('contactData');
-  };
+  // Progression : calendrier direct → horaire → confirmation du téléphone → RDV confirmé.
+  const progress =
+    pickerStep === 'calendar'
+      ? { width: '25%', pct: '25%', label: 'Choisir une date' }
+      : pickerStep === 'slots'
+        ? { width: '50%', pct: '50%', label: 'Choisir un horaire' }
+        : pickerStep === 'phone'
+          ? { width: '75%', pct: '75%', label: 'Confirmer le téléphone' }
+          : { width: '100%', pct: '100%', label: 'Rendez-vous confirmé !' };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -101,24 +100,28 @@ export default function ConfirmationPage() {
               </div>
             </div>
 
-            {/* Barre de progression */}
+            {/* Barre de progression (dynamique selon l'étape) */}
             <div className="mb-8 max-w-sm">
-              <div className="relative h-7 bg-white overflow-hidden">
-                <div className="h-full bg-(--color-orange) flex items-center" style={{ width: '80%' }}>
-                  <span className="font-[effra,Roboto,sans-serif] text-[12px] text-white font-semibold pl-3">
-                    Derni&egrave;re &eacute;tape...
-                  </span>
-                  <span className="font-[effra,Roboto,sans-serif] text-[12px] text-white font-bold ml-auto pr-3">
-                    80%
-                  </span>
-                </div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="font-[effra,Roboto,sans-serif] text-[13px] font-semibold text-(--color-dark)">
+                  {progress.label}
+                </span>
+                <span className="font-[effra,Roboto,sans-serif] text-[13px] font-bold text-(--color-orange)">
+                  {progress.pct}
+                </span>
+              </div>
+              <div className="relative h-2.5 bg-black/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-(--color-orange) rounded-full transition-all duration-500 ease-out"
+                  style={{ width: progress.width }}
+                />
               </div>
             </div>
 
             {/* Texte principal */}
             <h1 className="font-[arista-pro,Roboto,sans-serif] text-[28px] md:text-[36px] leading-tight mb-6">
               <span className="text-(--color-orange)">C&apos;est parti !</span>{' '}
-              <span className="text-(--color-dark)">Votre demande est entre nos mains.</span>
+              <span className="text-(--color-dark)">Nous allons vous accompagner &agrave; chaque &eacute;tape.</span>
             </h1>
 
             <p className="font-[effra,Roboto,sans-serif] text-[20px] text-(--color-dark) font-bold italic mb-4">
@@ -133,40 +136,7 @@ export default function ConfirmationPage() {
           {/* Colonne droite */}
           <div className="flex-1 flex items-center justify-center pb-10 lg:py-16">
             <div className="w-full max-w-lg bg-white rounded-xl shadow-2xl px-4 py-6">
-              {!confirmed && (
-                <h2 className="font-[effra,Roboto,sans-serif] text-[18px] font-bold text-(--color-dark) mb-6">
-                  Saisissez les informations
-                </h2>
-              )}
-
-              {!confirmed ? (
-                <form onSubmit={handleContinue}>
-                  <div className="border-3 border-(--color-orange) rounded-xl p-6 mb-6">
-                    <p className="font-[effra,Roboto,sans-serif] text-[16px] font-bold text-(--color-dark) text-center mb-6">
-                      Vos informations sont correctes ?
-                    </p>
-
-                    <FormInput id="conf-nom" name="nom" label="Nom" required value={data.nom} onChange={handleChange} className="mb-5" />
-                    <FormPhoneInput id="conf-telephone" name="telephone" label="Téléphone" required value={data.telephone} onChange={handleChange} className="mb-5" />
-                    <FormInput id="conf-email" name="email" label="E-mail" type="email" required value={data.email} onChange={handleChange} className="mb-10" />
-
-                    <CTAButton
-                      as="button"
-                      type="submit"
-                      variant="orange-warm"
-                      size="pill-sm"
-                      className="w-full border-none font-bold"
-                    >
-                      Continuer
-                    </CTAButton>
-                  </div>
-                </form>
-              ) : (
-                <AppointmentPicker
-                  onBack={() => setConfirmed(false)}
-                  contactData={data}
-                />
-              )}
+              <AppointmentPicker contactData={data} onStepChange={setPickerStep} />
             </div>
           </div>
         </div>

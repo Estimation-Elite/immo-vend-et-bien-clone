@@ -14,6 +14,10 @@ Build and deploy this Next.js app (immo-vend-et-bien-clone) to the IONOS VPS ser
 |------|-------------------|------------------|
 | Read from `.servers` → `MMB_HOST` | MMB | /opt/immo-vend-et-bien |
 
+## Public URL
+
+Once deployed, the app is live at **https://immovendbien.fr/** (served behind nginx-proxy-manager on the VPS). After deploying, verify with `curl -s -o /dev/null -w '%{http_code}' https://immovendbien.fr/` and report this URL to the user.
+
 ## Credentials
 
 Server passwords are stored in the `.servers` file at the repo root. Read it to get the password. NEVER display passwords to the user.
@@ -23,12 +27,12 @@ Server passwords are stored in the `.servers` file at the repo root. Read it to 
 A `Dockerfile` must exist at the project root. If it doesn't, create one before deploying:
 
 ```dockerfile
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --no-audit --no-fund
 
 FROM base AS builder
 WORKDIR /app

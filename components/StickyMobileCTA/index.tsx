@@ -3,16 +3,25 @@
 import { useEffect, useState } from 'react';
 import CTAButton from '@/components/CTAButton';
 import ContactForm from '@/components/ContactForm';
+import { usePageVariant } from '@/components/PageVariant';
 
 export default function StickyMobileCTA() {
+  const variant = usePageVariant();
+  const isLead = variant === 'lead';
   const [open, setOpen] = useState(false);
 
-  // Ouverture depuis d'autres sections via CustomEvent
+  // Ouverture / fermeture depuis d'autres sections via CustomEvent (variante landing uniquement)
   useEffect(() => {
-    const handler = () => setOpen(true);
-    window.addEventListener('open-contact-form', handler);
-    return () => window.removeEventListener('open-contact-form', handler);
-  }, []);
+    if (isLead) return;
+    const openHandler = () => setOpen(true);
+    const closeHandler = () => setOpen(false);
+    window.addEventListener('open-contact-form', openHandler);
+    window.addEventListener('close-contact-form', closeHandler);
+    return () => {
+      window.removeEventListener('open-contact-form', openHandler);
+      window.removeEventListener('close-contact-form', closeHandler);
+    };
+  }, [isLead]);
 
   // Fermeture à la touche Escape + blocage du scroll de la page
   useEffect(() => {
@@ -29,6 +38,23 @@ export default function StickyMobileCTA() {
     };
   }, [open]);
 
+  // Variante lead (/video) : barre fixe "Prendre rendez-vous" → /confirmation, sans modale
+  if (isLead) {
+    return (
+      <div className="fixed bottom-0 left-0 right-0 z-1000 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.15)] px-4 py-3 flex justify-center">
+        <CTAButton
+          variant="orange-warm"
+          size="pill-sm"
+          opensForm
+          location="sticky"
+          className="w-full max-w-100 text-center tracking-[1px] font-bold"
+        >
+          Prendre rendez-vous
+        </CTAButton>
+      </div>
+    );
+  }
+
   return (
     <>
       {/* Barre fixe en bas de page (tous formats) */}
@@ -37,8 +63,9 @@ export default function StickyMobileCTA() {
           as="button"
           variant="orange-warm"
           size="pill-sm"
-          onClick={() => setOpen(true)}
-          className="w-full max-w-100 text-center uppercase tracking-[1px] font-bold"
+          opensForm
+          location="sticky"
+          className="w-full max-w-100 text-center tracking-[1px] font-bold"
         >
           En savoir plus
         </CTAButton>

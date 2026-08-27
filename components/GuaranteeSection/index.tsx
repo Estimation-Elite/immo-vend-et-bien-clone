@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import type { AnimationItem } from 'lottie-web';
 import CTAButton from '@/components/CTAButton';
 
 export default function GuaranteeSection() {
   const lottieRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let animation: any;
+    let animation: AnimationItem | undefined;
     const observer = new IntersectionObserver(
       async ([entry]) => {
         if (entry.isIntersecting && lottieRef.current) {
@@ -55,7 +56,7 @@ export default function GuaranteeSection() {
           className="w-75 md:w-[450px] max-w-full mx-auto"
           ref={lottieRef}
         ></div>
-        <CTAButton variant="white">Je vérifie l&apos;éligibilité de mon bien</CTAButton>
+        <CTAButton variant="white" opensForm location="guarantee">Je vérifie l&apos;éligibilité de mon bien</CTAButton>
       </div>
     </section>
   );

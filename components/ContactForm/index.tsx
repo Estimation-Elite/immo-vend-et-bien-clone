@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import CTAButton from '@/components/CTAButton';
 import { FormInput, FormSelect, FormPhoneInput, FormAddressInput } from '@/components/FormField';
 import { useAddressAutocomplete, type AddressSuggestion } from '@/hooks/useAddressAutocomplete';
 import { trackLeadSubmitted } from '@/lib/analytics/trackLeadSubmitted';
+import { trackFormStart } from '@/lib/analytics/trackFormStart';
 
 const PROPERTY_TYPES = ['Une maison', 'Un appartement', 'Un Immeuble', 'Un terrain', 'Autre'] as const;
 const SALE_TIMELINES = ['Au plus vite', 'Dans les 3 mois', 'Plus tard', 'Je ne souhaite pas vendre'] as const;
@@ -58,6 +59,14 @@ export default function ContactForm() {
   });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const formStartedRef = useRef(false);
+
+  // GTM form_start : déclenché une seule fois à la première interaction utilisateur
+  const handleFirstInteraction = () => {
+    if (formStartedRef.current) return;
+    formStartedRef.current = true;
+    trackFormStart();
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -69,15 +78,6 @@ export default function ContactForm() {
       utm_term: params.get('utm_term') || '',
       utm_content: params.get('utm_content') || '',
     }));
-  }, []);
-
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const type = (e as CustomEvent<string>).detail;
-      setFormData((prev) => ({ ...prev, typeDeBien: type }));
-    };
-    window.addEventListener('select-property-type', handler);
-    return () => window.removeEventListener('select-property-type', handler);
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -125,9 +125,14 @@ export default function ContactForm() {
         throw new Error(data.error || 'Une erreur est survenue.');
       }
 
-      trackLeadSubmitted();
+      trackLeadSubmitted({
+        property_type: formData.typeDeBien,
+        sale_timeline: formData.delaiVente,
+        city: formData.ville,
+      });
       sessionStorage.setItem('contactData', JSON.stringify(formData));
-      router.push('/confirmation');
+      setStatus('idle');
+      router.push('/video');
       return;
     } catch (err) {
       setStatus('error');
@@ -135,18 +140,19 @@ export default function ContactForm() {
     }
   };
 
-  // Conditions de visibilité progressive
-  const showDelai = formData.ville.trim().length > 0;
-  const showNom = showDelai && formData.delaiVente !== '';
+  // Conditions de visibilité progressive (adresse → nom → email → tél → délai)
+  const showNom = formData.ville.trim().length > 0;
   const showEmail = showNom && formData.nom.trim().length > 0;
   const showTelephone = showEmail && formData.email.trim().length > 0;
+  const showDelai = showTelephone && formData.telephone.trim().length > 0;
 
   return (
     <form
       onSubmit={handleSubmit}
+      onFocusCapture={handleFirstInteraction}
       className="w-full max-w-225 border-3 border-(--color-orange) rounded-xl bg-white p-8 md:p-10 text-left mt-2"
     >
-      {/* Toujours visible : Type de bien */}
+      {/* 1. Toujours visible : Type de bien */}
       <FormSelect
         name="typeDeBien"
         label="Quel type de bien avez-vous ?"
@@ -156,10 +162,10 @@ export default function ContactForm() {
         className="mb-6"
       />
 
-      {/* Toujours visible : Ville (autocomplete) */}
+      {/* 2. Toujours visible : Adresse (autocomplete) */}
       <FormAddressInput
         name="ville"
-        label="L'adresse où se situe votre bien ?"
+        label="L'adresse où se trouve votre bien ?"
         required
         value={villeInput}
         onChange={onAddressInputChange}
@@ -172,23 +178,11 @@ export default function ContactForm() {
         className="mb-6"
       />
 
-      {/* Apparaît quand ville est remplie */}
-      <RevealField show={showDelai}>
-        <FormSelect
-          name="delaiVente"
-          label="Envisagez-vous de vendre votre bien :"
-          value={formData.delaiVente}
-          onChange={handleChange}
-          options={SALE_TIMELINES}
-          className="mb-6"
-        />
-      </RevealField>
-
-      {/* Apparaît quand délai est sélectionné */}
+      {/* 3. Apparaît quand l'adresse est remplie : Prénom et Nom */}
       <RevealField show={showNom}>
         <FormInput
           name="nom"
-          label="Nom"
+          label="Prénom et Nom"
           required={showNom}
           value={formData.nom}
           onChange={handleChange}
@@ -196,7 +190,7 @@ export default function ContactForm() {
         />
       </RevealField>
 
-      {/* Apparaît quand nom est rempli */}
+      {/* 4. Apparaît quand le nom est rempli : E-mail */}
       <RevealField show={showEmail}>
         <FormInput
           name="email"
@@ -209,14 +203,26 @@ export default function ContactForm() {
         />
       </RevealField>
 
-      {/* Apparaît quand email est rempli */}
+      {/* 5. Apparaît quand l'e-mail est rempli : Téléphone portable */}
       <RevealField show={showTelephone}>
         <FormPhoneInput
           name="telephone"
-          label="Téléphone"
+          label="Téléphone portable"
           required={showTelephone}
           value={formData.telephone}
           onChange={handleChange}
+          className="mb-6"
+        />
+      </RevealField>
+
+      {/* 6. Apparaît quand le téléphone est rempli : Envisagez-vous de vendre */}
+      <RevealField show={showDelai}>
+        <FormSelect
+          name="delaiVente"
+          label="Envisagez-vous de vendre votre bien ?"
+          value={formData.delaiVente}
+          onChange={handleChange}
+          options={SALE_TIMELINES}
           className="mb-6"
         />
       </RevealField>
@@ -247,10 +253,10 @@ export default function ContactForm() {
         disabled={status === 'submitting'}
         className="w-full border-none"
       >
-        <span className="font-bold text-[20px] block">
+        <span className="font-bold text-[21px] md:text-[26px] leading-tight block">
           {status === 'submitting'
             ? 'Envoi en cours...'
-            : "Je vérifie l\u2019éligibilité de mon bien"}
+            : 'Voir la vidéo Garantie vendeur à 30 jours'}
         </span>
         <span className="text-[14px] text-white/80 block mt-0.5">
           (gratuit et sans engagement)

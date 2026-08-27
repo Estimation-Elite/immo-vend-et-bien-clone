@@ -71,7 +71,7 @@ export default function TeamSection() {
               Votre projet immobilier,{' '}
               <strong className="text-(--color-orange)">notre priorité absolue&nbsp;!</strong>
             </p>
-            <CTAButton>Je vérifie l&apos;éligibilité de mon bien</CTAButton>
+            <CTAButton opensForm location="team">Je vérifie l&apos;éligibilité de mon bien</CTAButton>
           </div>
 
           {/* Right column: Véronique (haut) + Malik (bas) */}
@@ -95,7 +95,7 @@ export default function TeamSection() {
               Votre projet immobilier,{' '}
               <strong className="text-(--color-orange)">notre priorité absolue&nbsp;!</strong>
             </p>
-            <CTAButton>Je vérifie l&apos;éligibilité de mon bien</CTAButton>
+            <CTAButton opensForm location="team">Je vérifie l&apos;éligibilité de mon bien</CTAButton>
           </div>
 
           {/* Team members grid on mobile — ordre : Manil, Véronique / Alessia, Malik */}

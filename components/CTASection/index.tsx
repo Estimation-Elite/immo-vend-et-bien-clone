@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import type { AnimationItem } from 'lottie-web';
 import CTAButton from '@/components/CTAButton';
 
 export default function CTASection() {
   const lottieRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let animation: any;
+    let animation: AnimationItem | undefined;
     const observer = new IntersectionObserver(
       async ([entry]) => {
         if (entry.isIntersecting && lottieRef.current) {
@@ -47,13 +48,14 @@ export default function CTASection() {
           <CTAButton
             as="button"
             variant="orange-warm"
-            onClick={() => window.dispatchEvent(new CustomEvent('open-contact-form'))}
+            opensForm
+            location="cta_section"
           >
             EN SAVOIR PLUS
           </CTAButton>
           <span className="inline-flex items-center gap-2 bg-[#DE6539]/10 text-[#DE6539] font-[effra,Roboto,sans-serif] font-semibold text-[15px] px-4 py-1.5 rounded-full uppercase tracking-wide">
             <span className="w-2 h-2 rounded-full bg-[#DE6539] animate-pulse" aria-hidden="true"></span>
-            Offre limitée&nbsp;: 8 places disponibles
+            Offre limitée&nbsp;: 8 réservations possibles
           </span>
         </div>
       </div>
