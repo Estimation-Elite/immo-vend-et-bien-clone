@@ -41,7 +41,7 @@ function StatCounter({ stat, started }: { stat: StatItem; started: boolean }) {
   const value = useCounter(stat.target, started);
   return (
     <div className="text-center px-1 sm:px-3">
-      <span className="font-[arista-pro,Roboto,sans-serif] text-[30px] sm:text-[40px] md:text-[50px] text-(--color-dark) block leading-none uppercase whitespace-nowrap tabular-nums">
+      <span className="font-[effra,Roboto,sans-serif] font-bold text-[30px] sm:text-[40px] md:text-[50px] text-(--color-dark) block leading-none uppercase whitespace-nowrap tabular-nums [font-feature-settings:'lnum'_'tnum']">
         {value}
         {stat.suffix && (
           <span className="text-[0.5em] font-[effra,Roboto,sans-serif] font-bold lowercase align-baseline ml-0.5">

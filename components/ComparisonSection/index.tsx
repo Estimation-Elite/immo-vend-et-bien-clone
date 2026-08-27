@@ -51,9 +51,9 @@ export default function ComparisonSection() {
                 Une vente
               </h3>
               <img
-                src="/images/logo-white-horizontal.png"
+                src="/images/logo-white-horizontal-noslogan.png"
                 alt="Vend & Bien"
-                className="max-w-64 md:max-w-72 h-auto"
+                className="max-w-52 md:max-w-60 h-auto"
               />
             </div>
             <ul className="list-none p-0 m-0 flex flex-col gap-3">
